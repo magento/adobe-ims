@@ -10,29 +10,30 @@ namespace Magento\AdobeIms\Controller\Adminhtml\User;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Backend controller for retrieving data for the current user
+ * Get Adobe services user account action
  */
-class Profile extends Action
+class Profile extends Action implements HttpGetActionInterface
 {
-
     /**
      * Successful result code.
      */
-    const HTTP_OK = 200;
+    private const HTTP_OK = 200;
 
     /**
      * Internal server error response code.
      */
-    const HTTP_INTERNAL_ERROR = 500;
+    private const HTTP_INTERNAL_ERROR = 500;
 
     /**
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_AdobeStockImageAdminUi::save_preview_images';
+    public const ADMIN_RESOURCE = 'Magento_AdobeIms::profile';
 
     /**
      * @var UserContextInterface
@@ -50,7 +51,7 @@ class Profile extends Action
     private $logger;
 
     /**
-     * GetUserData constructor.
+     * Profile constructor.
      *
      * @param Action\Context $context
      * @param UserContextInterface $userContext
@@ -70,7 +71,7 @@ class Profile extends Action
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function execute()
     {
@@ -78,7 +79,8 @@ class Profile extends Action
             $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
             $userData = [
                 'email' => $userProfile->getEmail(),
-                'name' => $userProfile->getName()
+                'name' => $userProfile->getName(),
+                'image' => $userProfile->getImage()
             ];
             $responseCode = self::HTTP_OK;
 
@@ -88,10 +90,9 @@ class Profile extends Action
                 'result' => $userData
             ];
 
-        } catch (\Exception $exception) {
+        } catch (NoSuchEntityException $exception) {
             $responseCode = self::HTTP_INTERNAL_ERROR;
-            $logMessage = __('An error occurred during get user data operation: %1', $exception->getMessage());
-            $this->logger->critical($logMessage);
+            $this->logger->critical($exception);
             $responseContent = [
                 'success' => false,
                 'message' => __('An error occurred during get user data. Contact support.'),

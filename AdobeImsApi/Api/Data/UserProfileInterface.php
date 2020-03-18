@@ -8,48 +8,27 @@ declare(strict_types=1);
 
 namespace Magento\AdobeImsApi\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
- * Interface UserProfileInterface
+ * Declare the user profile data service object
  * @api
  */
-interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface UserProfileInterface extends ExtensibleDataInterface
 {
-    /**#@+
-     * Constants for keys of data array. Identical to the name of the getter in snake case
-     */
-    const ID = 'id';
-    const USER_ID = 'admin_user_id';
-    const NAME = 'name';
-    const EMAIL = 'email';
-    const ACCOUNT_TYPE = 'account_type';
-    const ACCESS_TOKEN = 'access_token';
-    const REFRESH_TOKEN = 'refresh_token';
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
-    const ACCESS_TOKEN_EXPIRES_AT = 'access_token_expires_at';
-    /**#@-*/
-
     /**
      * Get ID
      *
-     * @return int
+     * @return int|null
      */
     public function getId();
 
     /**
-     * Set ID
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setId($value);
-
-    /**
      * Get user ID
      *
-     * @return int
+     * @return int|null
      */
-    public function getUserId(): int;
+    public function getUserId(): ?int;
 
     /**
      * Set user ID
@@ -90,11 +69,26 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getEmail(): ?string;
 
     /**
+     * Get user profile image.
+     *
+     * @return string|null
+     */
+    public function getImage(): ?string;
+
+    /**
+     * Set's user profile image.
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setImage(string $value): void;
+
+    /**
      * Get account type
      *
-     * @return string
+     * @return string|null
      */
-    public function getAccountType(): string;
+    public function getAccountType(): ?string;
 
     /**
      * Set account type
@@ -137,9 +131,9 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Get creation time
      *
-     * @return string
+     * @return string|null
      */
-    public function getCreatedAt(): string;
+    public function getCreatedAt(): ?string;
 
     /**
      * Set creation time
@@ -152,9 +146,9 @@ interface UserProfileInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Get update time
      *
-     * @return string
+     * @return string|null
      */
-    public function getUpdatedAt(): string;
+    public function getUpdatedAt(): ?string;
 
     /**
      * Set update time

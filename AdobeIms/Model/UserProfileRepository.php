@@ -14,12 +14,15 @@ use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class UserProfileRepository
+ * Represent user profile repository
  */
 class UserProfileRepository implements UserProfileRepositoryInterface
 {
+    private const ADMIN_USER_ID = 'admin_user_id';
+
     /**
      * @var ResourceModel\UserProfile
      */
@@ -36,16 +39,25 @@ class UserProfileRepository implements UserProfileRepositoryInterface
     private $loadedEntities = [];
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * UserProfileRepository constructor.
+     *
      * @param ResourceModel\UserProfile $resource
      * @param UserProfileInterfaceFactory $entityFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceModel\UserProfile $resource,
-        UserProfileInterfaceFactory $entityFactory
+        UserProfileInterfaceFactory $entityFactory,
+        LoggerInterface $logger
     ) {
         $this->resource = $resource;
         $this->entityFactory = $entityFactory;
+        $this->logger = $logger;
     }
 
     /**
@@ -55,10 +67,14 @@ class UserProfileRepository implements UserProfileRepositoryInterface
     {
         try {
             $this->resource->save($entity);
-
             $this->loadedEntities[$entity->getId()] = $entity;
-        } catch (Exception $e) {
-            throw new CouldNotSaveException(__($e->getMessage()));
+        } catch (Exception $exception) {
+            $this->logger->critical($exception);
+            $message = __(
+                'An error occurred during user profile save: %error',
+                ['error' => $exception->getMessage()]
+            );
+            throw new CouldNotSaveException($message);
         }
     }
 
@@ -72,9 +88,10 @@ class UserProfileRepository implements UserProfileRepositoryInterface
         }
 
         $entity = $this->entityFactory->create();
-        $this->resource->load($entity, $entityId, UserProfileInterface::ID);
+        $this->resource->load($entity, $entityId);
         if (!$entity->getId()) {
-            throw new NoSuchEntityException(__('The user profile wasn\'t found.'));
+            $message = __('User profile with id %id not found.', ['id' => $entityId]);
+            throw new NoSuchEntityException($message);
         }
 
         return $this->loadedEntities[$entity->getId()] = $entity;
@@ -86,9 +103,10 @@ class UserProfileRepository implements UserProfileRepositoryInterface
     public function getByUserId(int $userId): UserProfileInterface
     {
         $entity = $this->entityFactory->create();
-        $this->resource->load($entity, $userId, UserProfileInterface::USER_ID);
+        $this->resource->load($entity, $userId, self::ADMIN_USER_ID);
         if (!$entity->getId()) {
-            throw new NoSuchEntityException(__('The user profile wasn\'t found.'));
+            $message = __('User profile with user id %id not found.', ['id' => $userId]);
+            throw new NoSuchEntityException($message);
         }
 
         return $this->loadedEntities[$entity->getId()] = $entity;
