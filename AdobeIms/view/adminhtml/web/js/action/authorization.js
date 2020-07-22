@@ -3,9 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-define([
-    'jquery'
-], function ($) {
+define([], function () {
     'use strict';
 
     /**
@@ -31,24 +29,14 @@ define([
     }
 
     return function (config) {
-        var authWindow,
-            deferred = $.Deferred(),
-            watcherId,
-            stopWatcherId;
-
-        /**
-         * Close authorization window if already opened
-         */
-        if (window.adobeIMSAuthWindow) {
-            window.adobeIMSAuthWindow.close();
-        }
+        var authWindow;
 
         /**
          * Opens authorization window with special parameters
          */
         authWindow = window.adobeIMSAuthWindow = window.open(
             config.url,
-            'authorization_widnow',
+            '',
             buildWindowParams(
                 config.popupWindowParams || {
                     width: 500,
@@ -57,76 +45,75 @@ define([
             )
         );
 
-        /**
-         * Stop handle
-         */
-        function stopHandle() {
-            // Clear timers
-            clearTimeout(stopWatcherId);
-            clearInterval(watcherId);
+        return new window.Promise(function (resolve, reject) {
+            var watcherId,
+                stopWatcherId;
 
-            // Close window
-            authWindow.close();
-        }
+            /**
+             * Stop handle
+             */
+            function stopHandle() {
+                // Clear timers
+                clearTimeout(stopWatcherId);
+                clearInterval(watcherId);
 
-        /**
-         * Start handle
-         */
-        function startHandle() {
-            var responseData;
+                // Close window
+                authWindow.close();
+            }
 
-            try {
+            /**
+             * Start handle
+             */
+            function startHandle() {
+                var responseData;
 
-                if (authWindow.document.domain !== document.domain ||
-                    authWindow.document.readyState !== 'complete') {
-                    return;
-                }
+                try {
 
-                /**
-                 * If within 10 seconds the result is not received, then reject the request
-                 */
-                stopWatcherId = setTimeout(function () {
+                    if (authWindow.document.domain !== document.domain ||
+                        authWindow.document.readyState !== 'complete') {
+                        return;
+                    }
+
+                    /**
+                     * If within 10 seconds the result is not received, then reject the request
+                     */
+                    stopWatcherId = setTimeout(function () {
+                        stopHandle();
+                        reject(new Error('Time\'s up.'));
+                    }, config.popupWindowTimeout || 60000);
+
+                    responseData = authWindow.document.body.innerHTML.match(
+                        config.callbackParsingParams.regexpPattern
+                    );
+
+                    if (!responseData) {
+                        return;
+                    }
+
                     stopHandle();
-                    deferred.reject(new Error('Time\'s up.'));
-                }, config.popupWindowTimeout || 60000);
 
-                responseData = authWindow.document.body.innerHTML.match(
-                    config.callbackParsingParams.regexpPattern
-                );
-
-                if (!responseData) {
-                    return;
-                }
-
-                stopHandle();
-
-                if (responseData[config.callbackParsingParams.codeIndex] ===
-                    config.callbackParsingParams.successCode) {
-                    deferred.resolve({
-                        isAuthorized: true,
-                        lastAuthSuccessMessage: responseData[config.callbackParsingParams.messageIndex]
-                    });
-                } else {
-                    deferred.reject(responseData[config.callbackParsingParams.messageIndex]);
-                }
-            } catch (e) {
-                if (authWindow.closed) {
-                    clearTimeout(stopWatcherId);
-                    clearInterval(watcherId);
-
-                    // eslint-disable-next-line max-depth
-                    if (window.adobeIMSAuthWindow && window.adobeIMSAuthWindow.closed) {
-                        deferred.reject(new Error('Authentication window was closed.'));
+                    if (responseData[config.callbackParsingParams.codeIndex] ===
+                        config.callbackParsingParams.successCode) {
+                        resolve({
+                            isAuthorized: true,
+                            lastAuthSuccessMessage: responseData[config.callbackParsingParams.messageIndex]
+                        });
+                    } else {
+                        reject(responseData[config.callbackParsingParams.messageIndex]);
+                    }
+                } catch (e) {
+                    if (authWindow.closed) {
+                        clearTimeout(stopWatcherId);
+                        clearInterval(watcherId);
+                        reject(new Error('Authentication window was closed.'));
                     }
                 }
             }
-        }
 
-        /**
-         * Watch a result 1 time per second
-         */
-        watcherId = setInterval(startHandle, 1000);
-
-        return deferred.promise();
+            /**
+             * Watch a result 1 time per second
+             */
+            watcherId = setInterval(startHandle, 1000);
+        });
     };
 });

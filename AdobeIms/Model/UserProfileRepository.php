@@ -21,6 +21,7 @@ use Psr\Log\LoggerInterface;
  */
 class UserProfileRepository implements UserProfileRepositoryInterface
 {
+    private const ID = 'id';
     private const ADMIN_USER_ID = 'admin_user_id';
 
     /**
@@ -70,7 +71,11 @@ class UserProfileRepository implements UserProfileRepositoryInterface
             $this->loadedEntities[$entity->getId()] = $entity;
         } catch (Exception $exception) {
             $this->logger->critical($exception);
-            throw new CouldNotSaveException(__('Could not save user profile.'), $exception);
+            $message = __(
+                'An error occurred during user profile save: %error',
+                ['error' => $exception->getMessage()]
+            );
+            throw new CouldNotSaveException($message);
         }
     }
 
@@ -84,9 +89,10 @@ class UserProfileRepository implements UserProfileRepositoryInterface
         }
 
         $entity = $this->entityFactory->create();
-        $this->resource->load($entity, $entityId);
+        $this->resource->load($entity, $entityId, self::ID);
         if (!$entity->getId()) {
-            throw new NoSuchEntityException(__('Could not find user profile id: %id.', ['id' => $entityId]));
+            $message = __('User profile with id %id not found.', ['id' => $entityId]);
+            throw new NoSuchEntityException($message);
         }
 
         return $this->loadedEntities[$entity->getId()] = $entity;
@@ -100,7 +106,8 @@ class UserProfileRepository implements UserProfileRepositoryInterface
         $entity = $this->entityFactory->create();
         $this->resource->load($entity, $userId, self::ADMIN_USER_ID);
         if (!$entity->getId()) {
-            throw new NoSuchEntityException(__('Could not find user profile id: %id.', ['id' => $userId]));
+            $message = __('User profile with user id %id not found.', ['id' => $userId]);
+            throw new NoSuchEntityException($message);
         }
 
         return $this->loadedEntities[$entity->getId()] = $entity;

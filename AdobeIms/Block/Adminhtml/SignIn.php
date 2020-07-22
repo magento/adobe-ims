@@ -30,10 +30,6 @@ class SignIn extends Template
     private const RESPONSE_MESSAGE_INDEX = 2;
     private const RESPONSE_SUCCESS_CODE = 'success';
     private const RESPONSE_ERROR_CODE = 'error';
-    private const ADOBE_IMS_JS_SIGNIN = 'Magento_AdobeIms/js/signIn';
-    private const ADOBE_IMS_SIGNIN = 'Magento_AdobeIms/signIn';
-    private const ADOBE_IMS_USER_PROFILE = 'adobe_ims/user/profile';
-    private const ADOBE_IMS_USER_LOGOUT = 'adobe_ims/user/logout';
 
     /**
      * @var ConfigInterface
@@ -113,10 +109,10 @@ class SignIn extends Template
     private function getDefaultComponentConfig(): array
     {
         return [
-            'component' => self::ADOBE_IMS_JS_SIGNIN,
-            'template' => self::ADOBE_IMS_SIGNIN,
-            'profileUrl' => $this->getUrl(self::ADOBE_IMS_USER_PROFILE),
-            'logoutUrl' => $this->getUrl(self::ADOBE_IMS_USER_LOGOUT),
+            'component' => 'Magento_AdobeIms/js/signIn',
+            'template' => 'Magento_AdobeIms/signIn',
+            'profileUrl' => $this->getUrl('adobe_ims/user/profile'),
+            'logoutUrl' => $this->getUrl('adobe_ims/user/logout'),
             'user' => $this->getUserData(),
             'loginConfig' => [
                 'url' => $this->config->getAuthUrl(),
@@ -188,7 +184,7 @@ class SignIn extends Template
             'isAuthorized' => false,
             'name' => '',
             'email' => '',
-            'image' => '',
+            'image' => $this->config->getDefaultProfileImage(),
         ];
     }
 }

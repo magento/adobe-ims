@@ -73,7 +73,7 @@ class GetImage implements GetImageInterface
             $result = $this->json->unserialize($curl->getBody());
             $image = $result['user']['images'][$size];
         } catch (\Exception $exception) {
-            $image = '';
+            $image = $this->config->getDefaultProfileImage();
             $this->logger->critical($exception);
         }
 

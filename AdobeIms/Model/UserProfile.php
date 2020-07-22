@@ -17,7 +17,7 @@ use Magento\AdobeImsApi\Api\Data\UserProfileExtensionInterface;
  */
 class UserProfile extends AbstractExtensibleModel implements UserProfileInterface
 {
-    /**
+    /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
     private const USER_ID = 'admin_user_id';
@@ -30,6 +30,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     private const CREATED_AT = 'created_at';
     private const UPDATED_AT = 'updated_at';
     private const ACCESS_TOKEN_EXPIRES_AT = 'access_token_expires_at';
+    /**#@-*/
 
     /**
      * @inheritdoc
@@ -42,7 +43,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritdoc
      */
-    public function getUserId(): ?int
+    public function getUserId(): int
     {
         return $this->getData(self::USER_ID);
     }
@@ -106,7 +107,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritdoc
      */
-    public function getAccountType(): ?string
+    public function getAccountType(): string
     {
         return $this->getData(self::ACCOUNT_TYPE);
     }
@@ -154,7 +155,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritdoc
      */
-    public function getCreatedAt(): ?string
+    public function getCreatedAt(): string
     {
         return $this->getData(self::CREATED_AT);
     }
@@ -170,7 +171,7 @@ class UserProfile extends AbstractExtensibleModel implements UserProfileInterfac
     /**
      * @inheritdoc
      */
-    public function getUpdatedAt(): ?string
+    public function getUpdatedAt(): string
     {
         return $this->getData(self::UPDATED_AT);
     }
