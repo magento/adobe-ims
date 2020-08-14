@@ -83,7 +83,7 @@ class GetImage implements GetImageInterface
     }
 
     /**
-     * Go over all sizes and get first one available
+     * Goes over all sizes and return first one available
      *
      * @param array $sizes
      * @param int $size
