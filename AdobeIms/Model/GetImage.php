@@ -90,14 +90,18 @@ class GetImage implements GetImageInterface
      */
     private function getImageSize(array $sizes, $size): string
     {
+        $size = '';
+
         if (isset($sizes[$size])) {
             return $sizes[$size];
         }
 
         foreach (self::IMAGE_SIZES as $size) {
             if (isset($sizes[$size])) {
-                return $sizes[$size];
+                $size =  $sizes[$size];
             }
         }
+
+        return $size;
     }
 }
