@@ -88,9 +88,9 @@ class GetImage implements GetImageInterface
      * @param array $sizes
      * @param int $size
      */
-    private function getImageSize(array $sizes, $size): string
+    private function getImageSize(array $sizes, int $size): string
     {
-        $size = '';
+        $emptyResult = '';
 
         if (array_values(array_keys($sizes)) !== self::IMAGE_SIZES) {
             return $size;
@@ -106,6 +106,6 @@ class GetImage implements GetImageInterface
             }
         }
 
-        return $size;
+        return $emptyResult;
     }
 }
