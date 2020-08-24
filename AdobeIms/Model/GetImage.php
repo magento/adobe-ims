@@ -18,8 +18,6 @@ use Magento\AdobeImsApi\Api\ConfigInterface;
  */
 class GetImage implements GetImageInterface
 {
-    private const IMAGE_SIZES = [50, 100, 115, 230, 138, 276];
-
     /**
      * @var LoggerInterface
      */
@@ -83,29 +81,21 @@ class GetImage implements GetImageInterface
     }
 
     /**
-     * Goes over all sizes and return first one available
+     * Get the profile image url of the requested size (or the biggest if requested size is not available)
      *
      * @param array $sizes
      * @param int $size
      */
     private function getImageSize(array $sizes, int $size): string
     {
-        $emptyResult = '';
-
-        if (array_values(array_keys($sizes)) !== self::IMAGE_SIZES) {
-            return $size;
+        if (empty($sizes)) {
+            return '';
         }
 
         if (isset($sizes[$size])) {
             return $sizes[$size];
         }
 
-        foreach (self::IMAGE_SIZES as $size) {
-            if (isset($sizes[$size])) {
-                return $sizes[$size];
-            }
-        }
-
-        return $emptyResult;
+        return end($sizes);
     }
 }
