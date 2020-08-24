@@ -103,7 +103,24 @@ class Callback extends Action implements HttpGetActionInterface
                 self::RESPONSE_SUCCESS_CODE,
                 __('Authorization was successful')
             );
-        } catch (AuthorizationException | ConfigurationMismatchException | CouldNotSaveException $exception) {
+        } catch (AuthorizationException $exception) {
+            $response = sprintf(
+                self::RESPONSE_TEMPLATE,
+                self::RESPONSE_ERROR_CODE,
+                __(
+                    'Login failed. Please check if <a href="%url">the Secret Key</a> is set correctly and try again.',
+                    [
+                        'url' => $this->getUrl(
+                            'adminhtml/system_config/edit',
+                            [
+                                'section' => 'system',
+                                '_fragment' => 'system_adobe_stock_integration-link'
+                            ]
+                        )
+                    ]
+                )
+            );
+        } catch (ConfigurationMismatchException | CouldNotSaveException $exception) {
             $response = sprintf(
                 self::RESPONSE_TEMPLATE,
                 self::RESPONSE_ERROR_CODE,

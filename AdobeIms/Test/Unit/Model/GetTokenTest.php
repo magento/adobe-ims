@@ -14,7 +14,6 @@ use Magento\AdobeImsApi\Api\Data\TokenResponseInterfaceFactory;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -49,11 +48,6 @@ class GetTokenTest extends TestCase
     private $getToken;
 
     /**
-     * @var UrlInterface|MockObject
-     */
-    private $url;
-
-    /**
      * Prepare test objects.
      */
     protected function setUp(): void
@@ -62,13 +56,11 @@ class GetTokenTest extends TestCase
         $this->curlFactoryMock = $this->createMock(CurlFactory::class);
         $this->jsonMock = $this->createMock(Json::class);
         $this->tokenResponseFactoryMock = $this->createMock(TokenResponseInterfaceFactory::class);
-        $this->url = $this->createMock(UrlInterface::class);
         $this->getToken = new GetToken(
             $this->configMock,
             $this->curlFactoryMock,
             $this->jsonMock,
-            $this->tokenResponseFactoryMock,
-            $this->url
+            $this->tokenResponseFactoryMock
         );
     }
 
