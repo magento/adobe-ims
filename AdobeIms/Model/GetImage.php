@@ -71,12 +71,31 @@ class GetImage implements GetImageInterface
 
             $curl->get($this->config->getProfileImageUrl());
             $result = $this->json->unserialize($curl->getBody());
-            $image = $result['user']['images'][$size];
+            $image = $this->getImageSize($result['user']['images'], $size);
         } catch (\Exception $exception) {
             $image = '';
             $this->logger->critical($exception);
         }
 
         return $image;
+    }
+
+    /**
+     * Get the profile image url of the requested size (or the biggest if requested size is not available)
+     *
+     * @param array $sizes
+     * @param int $size
+     */
+    private function getImageSize(array $sizes, int $size): string
+    {
+        if (empty($sizes)) {
+            return '';
+        }
+
+        if (isset($sizes[$size])) {
+            return $sizes[$size];
+        }
+
+        return end($sizes);
     }
 }
