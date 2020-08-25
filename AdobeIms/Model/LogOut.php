@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\AdobeIms\Model;
 
-use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
+use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdobeImsApi\Api\LogOutInterface;
 use Magento\AdobeImsApi\Api\ConfigInterface;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Psr\Log\LoggerInterface;
 
@@ -25,16 +24,6 @@ class LogOut implements LogOutInterface
      * Successful result code.
      */
     private const HTTP_FOUND = 302;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
-     * @var UserProfileRepositoryInterface
-     */
-    private $userProfileRepository;
 
     /**
      * @var LoggerInterface
@@ -52,26 +41,34 @@ class LogOut implements LogOutInterface
     private $curlFactory;
 
     /**
-     * SignOut constructor.
-     *
-     * @param UserContextInterface $userContext
-     * @param UserProfileRepositoryInterface $userProfileRepository
+     * @var GetAccessTokenInterface
+     */
+    private $getAccessToken;
+
+    /**
+     * @var FlushUserTokensInterface
+     */
+    private $flushUserTokens;
+
+    /**
      * @param LoggerInterface $logger
      * @param ConfigInterface $config
      * @param CurlFactory $curlFactory
+     * @param GetAccessTokenInterface $getAccessToken
+     * @param FlushUserTokensInterface $flushUserTokens
      */
     public function __construct(
-        UserContextInterface $userContext,
-        UserProfileRepositoryInterface $userProfileRepository,
         LoggerInterface $logger,
         ConfigInterface $config,
-        CurlFactory $curlFactory
+        CurlFactory $curlFactory,
+        GetAccessTokenInterface $getAccessToken,
+        FlushUserTokensInterface $flushUserTokens
     ) {
-        $this->userContext = $userContext;
-        $this->userProfileRepository = $userProfileRepository;
         $this->logger = $logger;
         $this->config = $config;
         $this->curlFactory = $curlFactory;
+        $this->getAccessToken = $getAccessToken;
+        $this->flushUserTokens = $flushUserTokens;
     }
 
     /**
@@ -80,36 +77,38 @@ class LogOut implements LogOutInterface
     public function execute() : bool
     {
         try {
-            try {
-                $userProfile = $this->userProfileRepository->getByUserId((int)$this->userContext->getUserId());
-            } catch (NoSuchEntityException $exception) {
-                return true;
-            }
-
-            $accessToken = $userProfile->getAccessToken();
+            $accessToken = $this->getAccessToken->execute();
 
             if (empty($accessToken)) {
                 return true;
             }
 
-            $curl = $this->curlFactory->create();
-            $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
-            $curl->addHeader('cache-control', 'no-cache');
-            $curl->get($this->config->getLogoutUrl($accessToken));
-
-            if ($curl->getStatus() !== self::HTTP_FOUND) {
-                throw new LocalizedException(
-                    __('An error occurred during logout operation.')
-                );
-            }
-
-            $userProfile->setAccessToken('');
-            $userProfile->setRefreshToken('');
-            $this->userProfileRepository->save($userProfile);
+            $this->externalLogOut($accessToken);
+            $this->flushUserTokens->execute();
             return true;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             return false;
+        }
+    }
+
+    /**
+     * Logout user from Adobe IMS
+     *
+     * @param string $accessToken
+     * @throws LocalizedException
+     */
+    private function externalLogOut(string $accessToken): void
+    {
+        $curl = $this->curlFactory->create();
+        $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
+        $curl->addHeader('cache-control', 'no-cache');
+        $curl->get($this->config->getLogoutUrl($accessToken));
+
+        if ($curl->getStatus() !== self::HTTP_FOUND) {
+            throw new LocalizedException(
+                __('An error occurred during logout operation.')
+            );
         }
     }
 }

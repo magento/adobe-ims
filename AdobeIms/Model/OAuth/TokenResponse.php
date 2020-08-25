@@ -17,23 +17,14 @@ use Magento\Framework\DataObject;
 class TokenResponse extends DataObject implements TokenResponseInterface
 {
     private const ACCESS_TOKEN = 'access_token';
-
     private const REFRESH_TOKEN = 'refresh_token';
-
     private const SUB = 'sub';
-
     private const NAME = 'name';
-
     private const TOKEN_TYPE = 'token_type';
-
     private const GIVEN_NAME = 'given_name';
-
     private const EXPIRES_IN = 'expires_in';
-
     private const FAMILY_NAME = 'family_name';
-
     private const EMAIL = 'email';
-
     private const ERROR = 'error';
 
     /**

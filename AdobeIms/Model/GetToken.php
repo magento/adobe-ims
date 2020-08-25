@@ -79,15 +79,12 @@ class GetToken implements GetTokenInterface
             ]
         );
 
-        $tokenResponse = $this->json->unserialize($curl->getBody());
-        $data = is_array($tokenResponse) ? $tokenResponse : ['error' => __('The response is empty.')];
-        /** @var TokenResponseInterface $tokenResponse */
-        $tokenResponse = $this->tokenResponseFactory->create(['data' => $data]);
+        $response = $this->json->unserialize($curl->getBody());
 
-        if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
+        if (!is_array($response) || empty($response['access_token'])) {
             throw new AuthorizationException(__('Could not login to Adobe IMS.'));
         }
 
-        return $tokenResponse;
+        return $this->tokenResponseFactory->create(['data' => $response]);
     }
 }
