@@ -53,6 +53,8 @@ class LogIn implements LogInInterface
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param UserProfileInterfaceFactory $userProfileFactory
      * @param GetImageInterface $getImage
+     * @param EncryptorInterface $encryptor
+     * @param DateTime $dateTime
      */
     public function __construct(
         UserProfileRepositoryInterface $userProfileRepository,
@@ -134,7 +136,7 @@ class LogIn implements LogInInterface
     {
         return $this->dateTime->gmtDate(
             self::DATE_FORMAT,
-            $this->dateTime->gmtTimestamp() + $expiresIn
+            $this->dateTime->gmtTimestamp() + $expiresIn / 1000
         );
     }
 }

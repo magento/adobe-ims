@@ -34,10 +34,9 @@ class GetAccessToken implements GetAccessTokenInterface
     private $encryptor;
 
     /**
-     * GetAccessToken constructor.
-     *
      * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         UserContextInterface $userContext,
