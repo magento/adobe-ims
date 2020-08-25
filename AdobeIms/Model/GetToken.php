@@ -15,7 +15,6 @@ use Magento\AdobeImsApi\Api\GetTokenInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\UrlInterface;
 
 /**
  * Represent the get user token functionality
@@ -43,30 +42,21 @@ class GetToken implements GetTokenInterface
     private $tokenResponseFactory;
 
     /**
-     * @var UrlInterface
-     */
-    private $url;
-
-    /**
-     * GetToken constructor.
      * @param ConfigInterface $config
      * @param CurlFactory $curlFactory
      * @param Json $json
      * @param TokenResponseInterfaceFactory $tokenResponseFactory
-     * @param UrlInterface $urlInterface
      */
     public function __construct(
         ConfigInterface $config,
         CurlFactory $curlFactory,
         Json $json,
-        TokenResponseInterfaceFactory $tokenResponseFactory,
-        UrlInterface $urlInterface
+        TokenResponseInterfaceFactory $tokenResponseFactory
     ) {
         $this->config = $config;
         $this->curlFactory = $curlFactory;
         $this->json = $json;
         $this->tokenResponseFactory = $tokenResponseFactory;
-        $this->url = $urlInterface;
     }
 
     /**
@@ -95,12 +85,7 @@ class GetToken implements GetTokenInterface
         $tokenResponse = $this->tokenResponseFactory->create(['data' => $data]);
 
         if (empty($tokenResponse->getAccessToken()) || empty($tokenResponse->getRefreshToken())) {
-            throw new AuthorizationException(
-                __(
-                    'Login failed. Please check if <a href="%1">the Secret Key</a> is set correctly and try again.',
-                    $this->url->getUrl('adminhtml/system_config/edit/section/system')
-                )
-            );
+            throw new AuthorizationException(__('Could not login to Adobe IMS.'));
         }
 
         return $tokenResponse;
