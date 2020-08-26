@@ -88,7 +88,6 @@ class LogIn implements LogInInterface
      *
      * @param UserProfileInterface $profile
      * @param TokenResponseInterface $response
-     * @param int $userId
      * @return UserProfileInterface
      */
     private function updateUserProfile(
