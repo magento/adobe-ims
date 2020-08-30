@@ -23,22 +23,22 @@ use PHPUnit\Framework\TestCase;
 class GetTokenTest extends TestCase
 {
     /**
-     * @var ConfigInterface|MockObject $config
+     * @var ConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var CurlFactory|MockObject $curlFactoryMock
+     * @var CurlFactory|MockObject
      */
     private $curlFactoryMock;
 
     /**
-     * @var Json|MockObject $jsonMock
+     * @var Json|MockObject
      */
     private $jsonMock;
 
     /**
-     * @var TokenResponseInterfaceFactory|MockObject $tokenResponseFactoryMock
+     * @var TokenResponseInterfaceFactory|MockObject
      */
     private $tokenResponseFactoryMock;
 
@@ -88,19 +88,17 @@ class GetTokenTest extends TestCase
         $curl->expects($this->once())
             ->method('post')
             ->willReturn(null);
+
+        $data = ['access_token' => 'string'];
+
         $this->jsonMock->expects($this->once())
             ->method('unserialize')
-            ->willReturn(['string']);
+            ->willReturn($data);
         $tokenResponse = $this->createMock(TokenResponse::class);
         $this->tokenResponseFactoryMock->expects($this->once())
             ->method('create')
+            ->with(['data' => $data])
             ->willReturn($tokenResponse);
-        $tokenResponse->expects($this->once())
-            ->method('getAccessToken')
-            ->willReturn('string');
-        $tokenResponse->expects($this->once())
-            ->method('getRefreshToken')
-            ->willReturn('string');
         $this->assertEquals($tokenResponse, $this->getToken->execute('code'));
     }
 }

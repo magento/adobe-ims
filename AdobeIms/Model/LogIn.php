@@ -12,8 +12,9 @@ use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterfaceFactory;
 use Magento\AdobeImsApi\Api\LogInInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\User\Api\Data\UserInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\AdobeImsApi\Api\GetImageInterface;
 
 /**
@@ -21,6 +22,8 @@ use Magento\AdobeImsApi\Api\GetImageInterface;
  */
 class LogIn implements LogInInterface
 {
+    private const DATE_FORMAT = 'Y-m-d H:i:s';
+
     /**
      * @var UserProfileRepositoryInterface
      */
@@ -37,18 +40,34 @@ class LogIn implements LogInInterface
     private $getUserImage;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
+     * @var DateTime
+     */
+    private $dateTime;
+
+    /**
      * @param UserProfileRepositoryInterface $userProfileRepository
      * @param UserProfileInterfaceFactory $userProfileFactory
      * @param GetImageInterface $getImage
+     * @param EncryptorInterface $encryptor
+     * @param DateTime $dateTime
      */
     public function __construct(
         UserProfileRepositoryInterface $userProfileRepository,
         UserProfileInterfaceFactory $userProfileFactory,
-        GetImageInterface $getImage
+        GetImageInterface $getImage,
+        EncryptorInterface $encryptor,
+        DateTime $dateTime
     ) {
         $this->userProfileRepository = $userProfileRepository;
         $this->userProfileFactory = $userProfileFactory;
         $this->getUserImage = $getImage;
+        $this->encryptor = $encryptor;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -56,19 +75,33 @@ class LogIn implements LogInInterface
      */
     public function execute(int $userId, TokenResponseInterface $tokenResponse): void
     {
-        $userImage = $this->getUserImage->execute($tokenResponse->getAccessToken());
-        $userProfile = $this->getUserProfile(($userId));
-        $userProfile->setName($tokenResponse->getName());
-        $userProfile->setEmail($tokenResponse->getEmail());
-        $userProfile->setImage($userImage);
-        $userProfile->setUserId($userId);
-        $userProfile->setAccessToken($tokenResponse->getAccessToken());
-        $userProfile->setRefreshToken($tokenResponse->getRefreshToken());
-        $userProfile->setAccessTokenExpiresAt(
-            $this->getExpiresTime($tokenResponse->getExpiresIn())
+        $this->userProfileRepository->save(
+            $this->updateUserProfile(
+                $this->getUserProfile($userId),
+                $tokenResponse
+            )
         );
+    }
 
-        $this->userProfileRepository->save($userProfile);
+    /**
+     * Update user profile with the data from token response
+     *
+     * @param UserProfileInterface $profile
+     * @param TokenResponseInterface $response
+     * @return UserProfileInterface
+     */
+    private function updateUserProfile(
+        UserProfileInterface $profile,
+        TokenResponseInterface $response
+    ): UserProfileInterface {
+        $profile->setName($response->getName());
+        $profile->setEmail($response->getEmail());
+        $profile->setImage($this->getUserImage->execute($response->getAccessToken()));
+        $profile->setAccessToken($this->encryptor->encrypt($response->getAccessToken()));
+        $profile->setRefreshToken($this->encryptor->encrypt($response->getRefreshToken()));
+        $profile->setAccessTokenExpiresAt($this->getExpiresTime($response->getExpiresIn()));
+
+        return $profile;
     }
 
     /**
@@ -82,7 +115,13 @@ class LogIn implements LogInInterface
         try {
             return $this->userProfileRepository->getByUserId($userId);
         } catch (NoSuchEntityException $exception) {
-            return $this->userProfileFactory->create();
+            return $this->userProfileFactory->create(
+                [
+                    'data' => [
+                        'admin_user_id' => $userId
+                    ]
+                ]
+            );
         }
     }
 
@@ -91,12 +130,12 @@ class LogIn implements LogInInterface
      *
      * @param int $expiresIn
      * @return string
-     * @throws \Exception
      */
     private function getExpiresTime(int $expiresIn): string
     {
-        $dateTime = new \DateTime();
-        $dateTime->add(new \DateInterval(sprintf('PT%dS', $expiresIn / 1000)));
-        return $dateTime->format('Y-m-d H:i:s');
+        return $this->dateTime->gmtDate(
+            self::DATE_FORMAT,
+            $this->dateTime->gmtTimestamp() + $expiresIn / 1000
+        );
     }
 }

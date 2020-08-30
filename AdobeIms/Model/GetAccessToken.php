@@ -10,6 +10,7 @@ namespace Magento\AdobeIms\Model;
 use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -28,17 +29,23 @@ class GetAccessToken implements GetAccessTokenInterface
     private $userContext;
 
     /**
-     * GetAccessToken constructor.
-     *
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * @param UserContextInterface $userContext
      * @param UserProfileRepositoryInterface $userProfileRepository
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         UserContextInterface $userContext,
-        UserProfileRepositoryInterface $userProfileRepository
+        UserProfileRepositoryInterface $userProfileRepository,
+        EncryptorInterface $encryptor
     ) {
         $this->userContext = $userContext;
         $this->userProfileRepository = $userProfileRepository;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -48,7 +55,9 @@ class GetAccessToken implements GetAccessTokenInterface
     {
         try {
             $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();
-            return $this->userProfileRepository->getByUserId($adminUserId)->getAccessToken();
+            return $this->encryptor->decrypt(
+                $this->userProfileRepository->getByUserId($adminUserId)->getAccessToken()
+            );
         } catch (NoSuchEntityException $exception) {
             return null;
         }

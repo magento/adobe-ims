@@ -49,8 +49,7 @@ class Logout extends Action implements HttpPostActionInterface
      */
     public function execute()
     {
-        $logout = $this->logout->execute();
-        if ($logout) {
+        if ($this->logout->execute()) {
             $responseCode = self::HTTP_INTERNAL_SUCCESS;
             $response = [
                 'success' => true,
