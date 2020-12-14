@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\AdobeIms\Test\Integration\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\AdobeIms\Model\Config;
 use PHPUnit\Framework\TestCase;
 
 /**
