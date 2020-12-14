@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\AdobeIms\Model;
+namespace Magento\AdobeIms\Test\Integration\Model;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
