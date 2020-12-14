@@ -44,12 +44,17 @@ class ConfigTest extends TestCase
     private const LOCALE_CODE = 'en_US';
     private const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
     private const AUTH_URL_PATTERN = 'https://auth-url.com/pattern' .
-    '?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}';
+    '?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=openid,creative_sdk,email,profile';
 
     /**
      * Callback URL constant
      */
     private const CALLBACK_URL = 'https://magento-instance.com/adobe_ims/oauth/callback';
+
+    /**
+     * Auth scopes
+     */
+    private const AUTH_SCOPES = ['openid', 'creative_sdk', 'email', 'profile'];
 
     /**
      * Logout URL constants
@@ -160,7 +165,8 @@ class ConfigTest extends TestCase
         $this->assertEquals(
             'https://auth-url.com/pattern?client_id=' . self::API_KEY .
                 '&redirect_uri=' . self::CALLBACK_URL .
-                '&locale=' . self::LOCALE_CODE,
+                '&locale=' . self::LOCALE_CODE .
+                '&scope=' . implode(',', self::AUTH_SCOPES),
             $this->config->getAuthUrl()
         );
     }
