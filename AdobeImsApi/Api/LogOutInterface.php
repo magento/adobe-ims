@@ -10,6 +10,8 @@ namespace Magento\AdobeImsApi\Api;
 
 /**
  * Declare functionality for user logout from the Adobe account
+ *
+ * @api
  */
 interface LogOutInterface
 {
