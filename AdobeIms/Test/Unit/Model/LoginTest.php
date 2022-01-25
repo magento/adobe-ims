@@ -16,6 +16,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Tests\NamingConvention\true\string;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
@@ -57,6 +58,11 @@ class LoginTest extends TestCase
     /**
      * @var string
      */
+    protected $scopeType;
+
+    /**
+     * @var string
+     */
     protected $defaultTimezonePath;
 
     /**
@@ -80,6 +86,11 @@ class LoginTest extends TestCase
     protected $dateTime;
 
     /**
+     * @var LogIn
+     */
+    protected $model;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -89,6 +100,7 @@ class LoginTest extends TestCase
         $this->encryptor = $this->createMock(EncryptorInterface::class);
         $this->userProfileFactory = $this->createMock(UserProfileInterfaceFactory::class);
         $this->getUserImage = $this->createMock(GetImageInterface::class);
+        $this->scopeType = 'default';
         $this->defaultTimezonePath = 'general/locale/timezone';
         $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->getMock();
@@ -154,7 +166,7 @@ class LoginTest extends TestCase
             ->willReturn($responseData['expires_in']);
         $this->scopeConfig->expects($this->atLeastOnce())
             ->method('getValue')
-            ->with($this->defaultTimezonePath, 'default', null)
+            ->with($this->defaultTimezonePath, $this->scopeType, null)
             ->willReturn('America/Chicago');
         $this->localeResolver->expects($this->atLeastOnce())
             ->method('getLocale')
