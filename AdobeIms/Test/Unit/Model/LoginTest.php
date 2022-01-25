@@ -27,8 +27,58 @@ use Magento\Framework\Stdlib\DateTime as StdlibDateTime;
 use Magento\AdobeImsApi\Api\GetImageInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * Unit tests for \Magento\AdobeIms\Model\LogIn class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LoginTest extends TestCase
 {
+    /**
+     * @var UserProfileRepositoryInterface|MockObject
+     */
+    protected $userProfileRepository;
+
+    /**
+     * @var EncryptorInterface|MockObject
+     */
+    protected $encryptor;
+
+    /**
+     * @var UserProfileInterfaceFactory|MockObject
+     */
+    protected $userProfileFactory;
+
+    /**
+     * @var GetImageInterface|MockObject
+     */
+    protected $getUserImage;
+
+    /**
+     * @var string
+     */
+    protected $defaultTimezonePath;
+
+    /**
+     * @var ScopeResolverInterface|MockObject
+     */
+    protected $scopeResolver;
+
+    /**
+     * @var ResolverInterface|MockObject
+     */
+    protected $localeResolver;
+
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var DateTime|MockObject
+     */
+    protected $dateTime;
+
     /**
      * @inheritdoc
      */
@@ -39,7 +89,6 @@ class LoginTest extends TestCase
         $this->encryptor = $this->createMock(EncryptorInterface::class);
         $this->userProfileFactory = $this->createMock(UserProfileInterfaceFactory::class);
         $this->getUserImage = $this->createMock(GetImageInterface::class);
-        $this->scopeType = 'default';
         $this->defaultTimezonePath = 'general/locale/timezone';
         $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->getMock();
@@ -53,7 +102,6 @@ class LoginTest extends TestCase
             ['localeDate' => $this->getTimezone()]
         );
 
-        $this->tokenResponseFactoryMock = $this->createMock(TokenResponseInterfaceFactory::class);
         $this->model = new LogIn(
             $this->userProfileRepository,
             $this->userProfileFactory,
@@ -106,7 +154,7 @@ class LoginTest extends TestCase
             ->willReturn($responseData['expires_in']);
         $this->scopeConfig->expects($this->atLeastOnce())
             ->method('getValue')
-            ->with($this->defaultTimezonePath, $this->scopeType, null)
+            ->with($this->defaultTimezonePath, 'default', null)
             ->willReturn('America/Chicago');
         $this->localeResolver->expects($this->atLeastOnce())
             ->method('getLocale')
