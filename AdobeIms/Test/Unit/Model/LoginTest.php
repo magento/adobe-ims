@@ -30,11 +30,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class LoginTest extends TestCase
 {
     /**
-     * @var string
-     */
-    private $testDate = '2015-04-02 21:03:00';
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -53,7 +48,7 @@ class LoginTest extends TestCase
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
 
-        $this->dateTime = $dataProvider = $objectManager->getObject(
+        $this->dateTime = $objectManager->getObject(
             DateTime::class,
             ['localeDate' => $this->getTimezone()]
         );
@@ -77,8 +72,7 @@ class LoginTest extends TestCase
      */
     public function testExecute(
         int $userId,
-        array $responseData,
-        string $input
+        array $responseData
     ): void {
         $userProfileMock = $this->createMock(UserProfileInterface::class);
         $this->userProfileRepository->expects($this->once())->method('save')
@@ -138,8 +132,7 @@ class LoginTest extends TestCase
                         'access_token' => 'kladjflakdjf3423rfzddsf',
                         'refresh_token' => 'kladjflakdjf3423rfzddsf',
                         'expires_in' => 1642259230998
-                    ],
-                    'input' => $this->testDate
+                    ]
                 ]
             ];
     }
