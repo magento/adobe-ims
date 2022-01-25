@@ -16,7 +16,6 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Tests\NamingConvention\true\string;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
