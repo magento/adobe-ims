@@ -12,6 +12,8 @@ use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * Declare functionality for user login from the Adobe account
+ *
+ * @api
  */
 interface LogInInterface
 {
