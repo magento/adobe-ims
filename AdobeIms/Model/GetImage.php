@@ -63,6 +63,7 @@ class GetImage implements GetImageInterface
      */
     public function execute(string $accessToken, int $size = 276): string
     {
+        $image = '';
         try {
             $curl = $this->curlFactory->create();
             $curl->addHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -71,9 +72,10 @@ class GetImage implements GetImageInterface
 
             $curl->get($this->config->getProfileImageUrl());
             $result = $this->json->unserialize($curl->getBody());
-            $image = $this->getImageSize($result['user']['images'], $size);
+            if (!empty($result['user']) && !empty($result['user']['images'])) {
+                $image = $this->getImageSize($result['user']['images'], $size);
+            }
         } catch (\Exception $exception) {
-            $image = '';
             $this->logger->critical($exception);
         }
 
