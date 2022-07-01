@@ -9,8 +9,8 @@ declare(strict_types=1);
 namespace Magento\AdminAdobeIms\Test\Unit\Service;
 
 use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
-use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdminAdobeIms\Service\ImsOrganizationService;
+use Magento\AdobeImsApi\Api\ConfigInterface;
+use Magento\AdobeImsApi\Api\GetOrganizationsInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
@@ -20,32 +20,32 @@ class ImsOrganizationServiceTest extends TestCase
     private const INVALID_ORGANIZATION_ID = '12121212ABCD1211AA11XXXX';
 
     /**
-     * @var ImsOrganizationService
+     * @var GetOrganizationsInterface
      */
     private $imsOrganizationService;
 
     /**
-     * @var ImsConfig
+     * @var ConfigInterface
      */
-    private $adminImsConfigMock;
+    private $imsConfigMock;
 
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
+        $this->imsConfigMock = $this->createMock(ConfigInterface::class);
 
         $this->imsOrganizationService = $objectManagerHelper->getObject(
-            ImsOrganizationService::class,
+            GetOrganizationsInterface::class,
             [
-                'adminImsConfig' => $this->adminImsConfigMock
+                'imsConfig' => $this->imsConfigMock
             ]
         );
     }
 
     public function testCheckOrganizationMembershipThrowsExceptionWhenProfileNotAssignedToOrg()
     {
-        $this->adminImsConfigMock
+        $this->imsConfigMock
             ->method('getOrganizationId')
             ->willReturn('');
 
