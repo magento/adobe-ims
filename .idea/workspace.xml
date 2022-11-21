@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="db651c2b-b442-4239-9650-27f78565c81e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Api/Data/ImsWebapiInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Api/Data/ImsWebapiSearchResultsInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Api/ImsLogOutInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Api/ImsWebapiRepositoryInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Api/TokenReaderInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/Action/Plugin/Authentication.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Block/Adminhtml/ImsReAuth.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Block/Adminhtml/System/Config/Form/Field/Disabled.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Console/Command/AdminAdobeImsDisableCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Console/Command/AdminAdobeImsEnableCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Console/Command/AdminAdobeImsInfoCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Console/Command/AdminAdobeImsStatusCommand.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/Adminhtml/OAuth/ImsCallback.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/Adminhtml/OAuth/ImsReauthCallback.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exception/AdobeImsAuthorizationException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Exception/AdobeImsOrganizationAuthorizationException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE_AFL.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Logger/AdminAdobeImsLogger.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/Auth.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/Authorization/AdobeImsTokenUserContext.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/Authorization/AdobeImsTokenUserService.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/FlushUserTokens.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/GetAccessTokenProxy.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/GetAccessTokenSession.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/ImsConnection.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/ImsEmailNotification.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/ImsWebapi.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/ImsWebapiRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/ImsWebapiSearchResults.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/LogOut.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/ResourceModel/ImsWebapi.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/ResourceModel/ImsWebapi/Collection.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/ResourceModel/User.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/TokenReader.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/User.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/UserAuthorizedProxy.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/UserAuthorizedSession.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Observer/AdminAccountCreatedObserver.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Observer/AdminLogoutObserver.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Observer/AuthObserver.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/AddAdobeImsLayoutHandlePlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/AdminForgotPasswordPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/AdminTokenPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/AdobeImsReauth/AddAdobeImsReAuthButton.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/BackendAuthSessionPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/Block/Adminhtml/Integration/Edit/Tab/AddReAuthVerification.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/Block/Adminhtml/SignInPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/Block/Adminhtml/System/Account/Edit/AddReAuthVerification.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/Block/Adminhtml/User/Edit/Tab/AddReAuthVerification.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/Block/Adminhtml/User/Role/Tab/AddReAuthVerification.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/CheckUserLoginBackendObserverPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/DisableAdminLoginAuthPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/DisableForcedPasswordChangePlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/DisablePasswordResetPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/OtherUserSessionPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/PerformIdentityCheckMessagePlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/RemovePasswordAndUserConfirmationFormFieldsPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/RemoveUserValidationRulesPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/ReplaceVerifyIdentityWithImsPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/ResetAttemptForBackendObserverPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/RevokeAdminAccessTokenPlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugin/UserSavePlugin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/AbstractAdminBaseProcessService.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/AdminLoginProcessService.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/AdminNotificationService.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/AdminReauthProcessService.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/ImsCommandOptionService.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/ImsCommandValidationService.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/ImsConfig.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/ImsOrganizationService.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Service/UpdateTokensService.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/ActionGroup/AdminAdobeImsSignInActionGroup.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/ActionGroup/AdminCreateUserWithoutPasswordActionGroup.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/ActionGroup/AdminDisableAdobeImsActionGroup.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/ActionGroup/AdminEnableAdobeImsActionGroup.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/ActionGroup/AssertAdminSignInEmptyCodeErrorMessageTestActionGroup.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/ActionGroup/AssertAdminSignInWithAdobeIdTestActionGroup.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/ActionGroup/AssertDisableAdminSignInWithAdobeIdTestActionGroup.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Data/AdobeImsNotesData.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Data/ClientCredentialsData.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Page/AdminAdobeImsCallbackPage.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Section/AdminAdobeImsSignInSection.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Section/AdminCreateUserSection.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Section/AdminSignInErrorMessageSection.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Section/AdminSignInWithAdobeIdSection.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Test/AdminAdobeImsDisabledInfoCommandTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Test/AdminAdobeImsEnabledInfoCommandTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Test/AdminCreateNewAdminUserWithAdobeImsTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Test/AdminDisableSignInWithAdobeIdTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Test/AdminSignInWithAdobeIdTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Mftf/Test/CallbackWithoutCodeRedirectsToAdminLoginTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Unit/Command/AdminAdobeImsEnableCommandTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Unit/Model/ImsConnectionTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Unit/Model/ImsWebapiRepositoryTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Unit/Model/ImsWebapiTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Unit/Plugin/AdminForgotPasswordPluginTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Unit/Plugin/Block/Adminhtml/SignInPluginTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Unit/Plugin/ReplaceVerifyIdentityWithImsPluginTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Unit/Service/AdminLoginProcessServiceTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Unit/Service/ImsCommandOptionServiceTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test/Unit/Service/ImsOrganizationServiceTest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModel/LinkViewModel.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ViewModel/MessageViewModel.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/adminhtml/di.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/adminhtml/events.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/adminhtml/routes.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/adminhtml/system.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/config.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/db_schema.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/db_schema_whitelist.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/di.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/email_templates.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/events.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/module.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/webapi_rest/di.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/etc/webapi_soap/di.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/registration.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/email/admin_adobe_ims_email_footer.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/email/admin_adobe_ims_email_header.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/email/new_admin_adobe_ims_admin_created.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/layout/adminhtml_integration_edit.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/layout/adminhtml_system_account_index.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/layout/adminhtml_user_edit.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/layout/adminhtml_user_role_editrole.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/layout/adobe_ims_login.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/requirejs-config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/templates/admin/note.phtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/templates/admin/sign_in.phtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/templates/load_icons.phtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/templates/messages/admin_adobe_ims_messages.phtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/templates/messages/wrapper.phtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/templates/user/reauth.phtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/css/adobe_email.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/css/source/_module.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/dist/index.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/images/AdobeStock_232925587.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/images/AdobeStock_232925587@2x.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/images/adobe-commerce-dark.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/images/adobe-commerce-light.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/images/spectrum-css-icons.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/images/spectrum-icons.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/js/admin_adobe_ims_load_icons.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/js/adobe-ims-reauth.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/js/loadicons.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/postcss.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/adminhtml/web/template/adobe-ims-reauth.html" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2HqzuSYb4FOg4u4hFUER6TlKa7r" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php.debug" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="ComposerRunConfigurationType" factoryName="Composer Script">
+      <option name="pathToComposerJson" value="$PROJECT_DIR$/composer.json" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="db651c2b-b442-4239-9650-27f78565c81e" name="Changes" comment="" />
+      <created>1669027625244</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1669027625244</updated>
+      <workItem from="1669027627926" duration="632000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
