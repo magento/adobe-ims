@@ -18,6 +18,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form\FormKey;
 
 class ImsConfig extends Config
 {
@@ -59,24 +61,33 @@ class ImsConfig extends Config
     private BackendUrlInterface $backendUrl;
 
     /**
+     * @var FormKey
+     */
+    private FormKey $formKey;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
      * @param WriterInterface $writer
      * @param EncryptorInterface $encryptor
      * @param BackendUrlInterface $backendUrl
+     * @param FormKey|null $formKey
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
         WriterInterface $writer,
         EncryptorInterface $encryptor,
-        BackendUrlInterface $backendUrl
+        BackendUrlInterface $backendUrl,
+        FormKey $formKey = null
     ) {
         parent::__construct($scopeConfig, $url);
         $this->writer = $writer;
         $this->encryptor = $encryptor;
         $this->scopeConfig = $scopeConfig;
         $this->backendUrl = $backendUrl;
+        $this->formKey = $formKey ?? ObjectManager::getInstance()
+                ->get(FormKey::class);
     }
 
     /**
@@ -253,11 +264,12 @@ class ImsConfig extends Config
         }
 
         return str_replace(
-            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{state}', '#{locale}'],
             [
                 $clientId,
                 $this->getAdminAdobeImsCallBackUrl(),
                 $this->getScopes(),
+                $this->formKey->getFormKey(),
                 $this->getLocale()
             ],
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_AUTH_URL_PATTERN)
@@ -272,11 +284,12 @@ class ImsConfig extends Config
     public function getAdminAdobeImsReAuthUrl(): string
     {
         return str_replace(
-            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{state}', '#{locale}'],
             [
                 $this->getApiKey(),
                 $this->getAdminAdobeImsReAuthCallBackUrl(),
                 $this->getScopes(),
+                $this->formKey->getFormKey(),
                 $this->getLocale()
             ],
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_REAUTH_URL_PATTERN)
