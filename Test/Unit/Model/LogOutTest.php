@@ -41,21 +41,6 @@ class LogOutTest extends TestCase
     private $loggerInterfaceMock;
 
     /**
-     * @var ConfigInterface|MockObject
-     */
-    private $configInterfaceMock;
-
-    /**
-     * @var GetAccessTokenInterface|MockObject
-     */
-    private $getToken;
-
-    /**
-     * @var FlushUserTokensInterface|MockObject
-     */
-    private $flushTokens;
-
-    /**
      * @var LogOut|MockObject $model
      */
     private $model;
