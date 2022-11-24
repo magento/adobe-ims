@@ -15,5 +15,3 @@ Actions,Actions
 Login,Login
 Logout,Logout
 "Get User Profile","Get User Profile"
-"Invalid state returned in callback from IMS.","Invalid state returned in callback from IMS."
-"Invalid state returned from IMS","Invalid state returned from IMS"
