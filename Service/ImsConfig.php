@@ -191,17 +191,11 @@ class ImsConfig extends Config
     /**
      * Get Token validation url
      *
-     * @param string $code
-     * @param string $tokenType
      * @return string
      */
-    public function getValidateTokenUrl(string $code, string $tokenType): string
+    public function getValidateTokenUrl(): string
     {
-        return str_replace(
-            ['#{token}', '#{client_id}', '#{token_type}'],
-            [$code, $this->getApiKey(), $tokenType],
-            $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL)
-        );
+        return $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL);
     }
 
     /**
@@ -358,16 +352,11 @@ class ImsConfig extends Config
     /**
      * Get BackendLogout URL
      *
-     * @param string $accessToken
      * @return string
      */
-    public function getBackendLogoutUrl(string $accessToken) : string
+    public function getBackendLogoutUrl() : string
     {
-        return str_replace(
-            ['#{access_token}', '#{client_secret}', '#{client_id}'],
-            [$accessToken, $this->getPrivateKey(), $this->getApiKey()],
-            $this->scopeConfig->getValue(self::XML_PATH_ADMIN_LOGOUT_URL)
-        );
+        return $this->scopeConfig->getValue(self::XML_PATH_ADMIN_LOGOUT_URL);
     }
 
     /**
