@@ -193,9 +193,13 @@ class ImsConfig extends Config
      *
      * @return string
      */
-    public function getValidateTokenUrl(): string
+    public function getValidateTokenUrl(string $code, string $tokenType): string
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL);
+        return str_replace(
+            ['#{token}', '#{client_id}', '#{token_type}'],
+            [$code, $this->getApiKey(), $tokenType],
+            $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL)
+        );
     }
 
     /**
