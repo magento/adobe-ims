@@ -1,0 +1,11 @@
+{
+  "name": "adobe-commerce/adobe-ims-metapackage",
+  "description": "Adobe IMS Integration",
+  "type": "metapackage",
+  "require": {
+    "php": "~7.4.0||~8.1.0",
+    "magento/module-admin-adobe-ims": "*",
+    "magento/module-adobe-ims": "*",
+    "magento/module-adobe-ims-api": "*"
+  }
+}
