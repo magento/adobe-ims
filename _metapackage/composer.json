@@ -1,5 +1,5 @@
 {
-  "name": "adobe-commerce/adobe-ims-metapackage",
+  "name": "magento/adobe-ims",
   "description": "Adobe IMS Integration",
   "type": "metapackage",
   "require": {
