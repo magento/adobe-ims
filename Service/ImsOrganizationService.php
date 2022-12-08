@@ -51,7 +51,7 @@ class ImsOrganizationService
                 __('Can\'t check user membership in organization.')
             );
         }
-        return;
+
         try {
             $curl = $this->curlFactory->create();
 
@@ -75,7 +75,6 @@ class ImsOrganizationService
                     __('User is not a member of configured Adobe Organization.')
                 );
             }
-
         } catch (\Exception $exception) {
             throw new AdobeImsOrganizationAuthorizationException(
                 __('Organization Membership check can\'t be performed')
