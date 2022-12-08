@@ -51,7 +51,7 @@ class ImsOrganizationService
                 __('Can\'t check user membership in organization.')
             );
         }
-
+        return;
         try {
             $curl = $this->curlFactory->create();
 
