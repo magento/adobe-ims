@@ -25,6 +25,11 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Class ImsCallback
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ImsCallback extends Auth implements HttpGetActionInterface
 {
     public const ACTION_NAME = 'imscallback';
