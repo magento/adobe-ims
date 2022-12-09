@@ -26,7 +26,8 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
 /**
- * Class ImsCallback
+ * Class ImsCallback is responsible to get the Access Token, User Profile,
+ * check if the assigned organization is valid, And Check if user exists and then do the login
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
