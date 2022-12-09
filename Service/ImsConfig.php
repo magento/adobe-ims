@@ -18,7 +18,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\FormKey;
 
 class ImsConfig extends Config
@@ -71,7 +70,7 @@ class ImsConfig extends Config
      * @param WriterInterface $writer
      * @param EncryptorInterface $encryptor
      * @param BackendUrlInterface $backendUrl
-     * @param FormKey|null $formKey
+     * @param FormKey $formKey
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -79,15 +78,14 @@ class ImsConfig extends Config
         WriterInterface $writer,
         EncryptorInterface $encryptor,
         BackendUrlInterface $backendUrl,
-        FormKey $formKey = null
+        FormKey $formKey
     ) {
         parent::__construct($scopeConfig, $url);
         $this->writer = $writer;
         $this->encryptor = $encryptor;
         $this->scopeConfig = $scopeConfig;
         $this->backendUrl = $backendUrl;
-        $this->formKey = $formKey ?? ObjectManager::getInstance()
-                ->get(FormKey::class);
+        $this->formKey = $formKey;
     }
 
     /**
