@@ -29,6 +29,9 @@ class VerifyAdminAdobeImsIsEnableTest extends TestCase
     /** @var Observer|MockObject */
     protected $observer;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->controllerActionPredispatch = $this->createMock(ControllerActionPredispatch::class);
@@ -39,8 +42,10 @@ class VerifyAdminAdobeImsIsEnableTest extends TestCase
 
     /**
      * Test when AdobeIms is Enabled
+     *
+     * @return void
      */
-    public function testAroundExecuteWhenAdobeImsIsEnabled()
+    public function testAroundExecuteWhenAdobeImsIsEnabled(): void
     {
         $closure = function () {
             return;
@@ -62,8 +67,10 @@ class VerifyAdminAdobeImsIsEnableTest extends TestCase
 
     /**
      * Test when AdobeIms is Disabled
+     *
+     * @return void
      */
-    public function testAroundExecuteWhenAdobeImsIsDisabled()
+    public function testAroundExecuteWhenAdobeImsIsDisabled(): void
     {
         $result = $this->getMockBuilder(ResultInterface::class)
             ->disableOriginalConstructor()
