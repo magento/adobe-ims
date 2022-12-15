@@ -37,6 +37,7 @@ class VerifyAdminAdobeImsIsEnable
      * @param callable $proceed
      * @param Observer $observer
      * @return ControllerActionPredispatch|void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundExecute(
         ControllerActionPredispatch $subject,

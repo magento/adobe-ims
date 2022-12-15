@@ -21,13 +21,16 @@ use Magento\Framework\Event\Observer;
 class VerifyAdminAdobeImsIsEnableTest extends TestCase
 {
     /** @var ControllerActionPredispatch|MockObject */
-    private $controllerActionPredispatch;
+    private ControllerActionPredispatch $controllerActionPredispatch;
 
     /** @var ImsConfig|MockObject */
-    private $imsConfig;
+    private ImsConfig $imsConfig;
 
     /** @var Observer|MockObject */
-    private $observer;
+    private Observer $observer;
+
+    /** @var VerifyAdminAdobeImsIsEnable */
+    private $plugin;
 
     /**
      * @inheritdoc
