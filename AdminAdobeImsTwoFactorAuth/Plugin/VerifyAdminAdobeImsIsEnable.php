@@ -19,7 +19,7 @@ class VerifyAdminAdobeImsIsEnable
     /**
      * @var ImsConfig
      */
-    private $adminAdobeImsConfig;
+    private ImsConfig $adminAdobeImsConfig;
 
     /**
      * @param ImsConfig $adminAdobeImsConfig
