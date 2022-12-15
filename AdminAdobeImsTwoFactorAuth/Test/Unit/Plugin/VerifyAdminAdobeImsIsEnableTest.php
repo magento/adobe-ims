@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeImsTwoFactorAuth\Plugin;
+namespace Magento\AdminAdobeImsTwoFactorAuth\Test\Unit\Plugin;
 
 use Magento\Framework\Controller\ResultInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -30,7 +30,7 @@ class VerifyAdminAdobeImsIsEnableTest extends TestCase
     private Observer $observer;
 
     /** @var VerifyAdminAdobeImsIsEnable */
-    private $plugin;
+    private VerifyAdminAdobeImsIsEnable $plugin;
 
     /**
      * @inheritdoc
