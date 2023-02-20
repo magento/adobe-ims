@@ -17,23 +17,6 @@ class ImsConfig extends Config
     private const XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE = 'adobe_ims/email/content_template';
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private ScopeConfigInterface $scopeConfig;
-
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param UrlInterface $url
-     */
-    public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        UrlInterface $url
-    ) {
-        parent::__construct($scopeConfig, $url);
-        $this->scopeConfig = $scopeConfig;
-    }
-
-    /**
      * Check if module is enabled
      *
      * @return bool

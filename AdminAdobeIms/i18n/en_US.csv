@@ -50,3 +50,5 @@ Documentation,Documentation
 "If you have any questions about access to Adobe Commerce, contact your administrator or your Adobe account team for more information.","If you have any questions about access to Adobe Commerce, contact your administrator or your Adobe account team for more information."
 "Enable Logging for Admin Adobe IMS Module","Enable Logging for Admin Adobe IMS Module"
 "Adobe Commerce","Adobe Commerce"
+"Invalid state returned in callback from IMS","Invalid state returned in callback from IMS"
+"Invalid state returned from IMS","Invalid state returned from IMS"

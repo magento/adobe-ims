@@ -11,8 +11,8 @@
             <integration>
                 <admin_enabled>0</admin_enabled>
                 <admin>
-                    <auth_url_pattern><![CDATA[#{imsUrl}/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code]]></auth_url_pattern>
-                    <reauth_url_pattern><![CDATA[#{imsUrl}/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&response_type=code&reauth=check]]></reauth_url_pattern>
+                    <auth_url_pattern><![CDATA[#{imsUrl}/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&state=#{state}&response_type=code]]></auth_url_pattern>
+                    <reauth_url_pattern><![CDATA[#{imsUrl}/ims/authorize/v2?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}&scope=#{scope}&state=#{state}&response_type=code&reauth=check]]></reauth_url_pattern>
                     <scopes>
                         <AdobeID>AdobeID</AdobeID>
                         <openid>openid</openid>

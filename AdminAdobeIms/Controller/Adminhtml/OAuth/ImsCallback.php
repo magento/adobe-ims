@@ -16,6 +16,9 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Controller\Adminhtml\Auth;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
 
 /**
  * Callback for handling redirect from Adobe IMS
@@ -55,6 +58,28 @@ class ImsCallback extends Auth implements HttpGetActionInterface
         $this->adminImsConfig = $adminImsConfig;
         $this->logger = $logger;
         $this->userContext = $userContext;
+    }
+
+    /**
+     * Validate IMS state is valid
+     *
+     * @param RequestInterface $request
+     * @return ResponseInterface
+     */
+    public function dispatch(RequestInterface $request)
+    {
+        $request->setParam('form_key', $request->getParam('state', null));
+        if (!$this->_formKeyValidator->validate($request)) {
+            $this->logger->critical(__('Invalid state returned in callback from IMS.'));
+            $this->imsErrorMessage(
+                'Error signing in',
+                'Something went wrong and we could not sign you in. ' .
+                'Please try again or contact your administrator.'
+            );
+            $this->_actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
+            return $this->_redirect($this->_helper->getHomePageUrl());
+        }
+        return parent::dispatch($request);
     }
 
     /**
