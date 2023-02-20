@@ -112,19 +112,4 @@ class ImsReauthCallback extends Auth implements HttpGetActionInterface
 
         return $resultRaw;
     }
-
-    /**
-     * Validate IMS state is valid
-     *
-     * @param RequestInterface $request
-     * @return void
-     * @throws NotFoundException
-     */
-    private function validateStateKey(RequestInterface $request): void
-    {
-        $request->setParam('form_key', $request->getParam('state', null));
-        if (!$this->_formKeyValidator->validate($request)) {
-            throw new NotFoundException(__('Invalid state returned from IMS'));
-        }
-    }
 }

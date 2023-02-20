@@ -16,7 +16,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\Data\Form\FormKey;
 
 /**
  * Represent the Adobe IMS config model responsible for retrieving config settings for Adobe Ims
@@ -75,7 +74,6 @@ class Config implements ConfigInterface
     private BackendUrlInterface $backendUrl;
 
     /**
-<<<<<<<< HEAD:AdobeIms/Model/Config.php
      * Config constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
@@ -83,36 +81,15 @@ class Config implements ConfigInterface
      * @param WriterInterface|null $writer
      * @param EncryptorInterface|null $encryptor
      * @param BackendUrlInterface|null $backendUrl
-========
-     * @var FormKey
-     */
-    private FormKey $formKey;
-
-    /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param UrlInterface $url
-     * @param WriterInterface $writer
-     * @param EncryptorInterface $encryptor
-     * @param BackendUrlInterface $backendUrl
-     * @param FormKey $formKey
->>>>>>>> origin/future-develop:AdminAdobeIms/Service/ImsConfig.php
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
-<<<<<<<< HEAD:AdobeIms/Model/Config.php
         WriterInterface $writer = null,
         EncryptorInterface $encryptor = null,
         BackendUrlInterface $backendUrl = null
-========
-        WriterInterface $writer,
-        EncryptorInterface $encryptor,
-        BackendUrlInterface $backendUrl,
-        FormKey $formKey
->>>>>>>> origin/future-develop:AdminAdobeIms/Service/ImsConfig.php
     ) {
         $this->scopeConfig = $scopeConfig;
-<<<<<<<< HEAD:AdobeIms/Model/Config.php
         $this->url = $url;
         $this->writer = $writer ?? ObjectManager::getInstance()
                 ->get(WriterInterface::class);
@@ -120,10 +97,6 @@ class Config implements ConfigInterface
                 ->get(EncryptorInterface::class);
         $this->backendUrl = $backendUrl ?? ObjectManager::getInstance()
                 ->get(BackendUrlInterface::class);
-========
-        $this->backendUrl = $backendUrl;
-        $this->formKey = $formKey;
->>>>>>>> origin/future-develop:AdminAdobeIms/Service/ImsConfig.php
     }
 
     /**
@@ -452,17 +425,11 @@ class Config implements ConfigInterface
      *
      * @return string
      */
-<<<<<<<< HEAD:AdobeIms/Model/Config.php
     private function getAdminAdobeImsReAuthCallBackUrl(): string
     {
         return $this->backendUrl->getUrl(
             self::OAUTH_CALLBACK_IMS_URL . self::IMS_REAUTH_CALLBACK
         );
-========
-    public function getValidateTokenUrl(): string
-    {
-        return $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL);
->>>>>>>> origin/future-develop:AdminAdobeIms/Service/ImsConfig.php
     }
 
     /**
@@ -513,123 +480,6 @@ class Config implements ConfigInterface
     }
 
     /**
-<<<<<<<< HEAD:AdobeIms/Model/Config.php
-========
-     * Generate the AdminAdobeIms AuthUrl with given clientID or the ClientID stored in the config
-     *
-     * @param string|null $clientId
-     * @return string
-     */
-    public function getAdminAdobeImsAuthUrl(?string $clientId): string
-    {
-        if ($clientId === null) {
-            $clientId = $this->getApiKey();
-        }
-
-        return str_replace(
-            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{state}', '#{locale}'],
-            [
-                $clientId,
-                $this->getAdminAdobeImsCallBackUrl(),
-                $this->getScopes(),
-                $this->formKey->getFormKey(),
-                $this->getLocale()
-            ],
-            $this->scopeConfig->getValue(self::XML_PATH_ADMIN_AUTH_URL_PATTERN)
-        );
-    }
-
-    /**
-     * Generate the AdminAdobeIms AuthUrl for reAuth
-     *
-     * @return string
-     */
-    public function getAdminAdobeImsReAuthUrl(): string
-    {
-        return str_replace(
-            ['#{client_id}', '#{redirect_uri}', '#{scope}', '#{state}', '#{locale}'],
-            [
-                $this->getApiKey(),
-                $this->getAdminAdobeImsReAuthCallBackUrl(),
-                $this->getScopes(),
-                $this->formKey->getFormKey(),
-                $this->getLocale()
-            ],
-            $this->scopeConfig->getValue(self::XML_PATH_ADMIN_REAUTH_URL_PATTERN)
-        );
-    }
-
-    /**
-     * Get scopes for AdobeIms
-     *
-     * @return string
-     */
-    private function getScopes(): string
-    {
-        return implode(
-            ',',
-            $this->scopeConfig->getValue(self::XML_PATH_ADMIN_ADOBE_IMS_SCOPES)
-        );
-    }
-
-    /**
-     * Get email template for new created admin users
-     *
-     * @return string
-     */
-    public function getEmailTemplateForNewAdminUsers(): string
-    {
-        return (string) $this->scopeConfig->getValue(
-            self::XML_PATH_NEW_ADMIN_EMAIL_TEMPLATE
-        );
-    }
-
-    /**
-     * Get callback url for AdminAdobeIms Module
-     *
-     * @return string
-     */
-    private function getAdminAdobeImsCallBackUrl(): string
-    {
-        return $this->backendUrl->getUrl(
-            self::OAUTH_CALLBACK_URL . ImsCallback::ACTION_NAME
-        );
-    }
-
-    /**
-     * Get reAuth callback url for AdminAdobeIms Module
-     *
-     * @return string
-     */
-    private function getAdminAdobeImsReAuthCallBackUrl(): string
-    {
-        return $this->backendUrl->getUrl(
-            self::OAUTH_CALLBACK_URL . ImsReauthCallback::ACTION_NAME
-        );
-    }
-
-    /**
-     * Get locale
-     *
-     * @return string
-     */
-    private function getLocale(): string
-    {
-        return $this->scopeConfig->getValue(Custom::XML_PATH_GENERAL_LOCALE_CODE);
-    }
-
-    /**
-     * Get BackendLogout URL
-     *
-     * @return string
-     */
-    public function getBackendLogoutUrl() : string
-    {
-        return $this->scopeConfig->getValue(self::XML_PATH_ADMIN_LOGOUT_URL);
-    }
-
-    /**
->>>>>>>> origin/future-develop:AdminAdobeIms/Service/ImsConfig.php
      * Retrieve Organization Id
      *
      * @return string
