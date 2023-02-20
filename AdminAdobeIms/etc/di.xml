@@ -5,74 +5,96 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\AdminAdobeIms\Api\Data\ImsWebapiSearchResultsInterface" type="Magento\AdminAdobeIms\Model\ImsWebapiSearchResults"/>
-    <preference for="Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface" type="Magento\AdminAdobeIms\Model\ImsWebapiRepository"/>
-    <preference for="Magento\AdminAdobeIms\Api\Data\ImsWebapiInterface" type="Magento\AdminAdobeIms\Model\ImsWebapi"/>
-    <preference for="Magento\AdobeImsApi\Api\GetAccessTokenInterface" type="Magento\AdminAdobeIms\Model\GetAccessTokenProxy"/>
-    <preference for="Magento\AdobeImsApi\Api\UserAuthorizedInterface" type="Magento\AdminAdobeIms\Model\UserAuthorizedProxy"/>
-    <preference for="Magento\AdminAdobeIms\Api\SaveImsUserInterface" type="Magento\AdminAdobeIms\Model\SaveImsUser"/>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Backend\App\Action\Plugin\Authentication"
+                type="Magento\AdminAdobeIms\App\Action\Plugin\Authentication"/>
+    <preference for="Magento\Backend\Model\Auth\Credential\StorageInterface"
+                type="Magento\AdminAdobeIms\Model\User" />
 
-    <type name="Magento\Framework\Console\CommandListInterface">
+    <type name="Magento\Framework\View\Result\Layout">
+        <plugin name="add_adobe_ims_layout_handle"
+                type="Magento\AdminAdobeIms\Plugin\AddAdobeImsLayoutHandlePlugin" />
+    </type>
+
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
         <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="adminAdobeEnableImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsEnableCommand</item>
-                <item name="adminAdobeDisableImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsDisableCommand</item>
-                <item name="adminAdobeInfoImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsInfoCommand</item>
-                <item name="adminAdobeStatusImsCommand" xsi:type="object">Magento\AdminAdobeIms\Console\Command\AdminAdobeImsStatusCommand</item>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="adminAdobeImsMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_AdminAdobeIms::messages/admin_adobe_ims_messages.phtml</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
 
-    <type name="Magento\User\Controller\Adminhtml\Auth\Forgotpassword">
-        <plugin name="admin_forgot_password_plugin" type="Magento\AdminAdobeIms\Plugin\AdminForgotPasswordPlugin" sortOrder="1"/>
+    <type name="Magento\User\Model\User">
+        <plugin name="aroundVerifyIdentity"
+                type="Magento\AdminAdobeIms\Plugin\ReplaceVerifyIdentityWithImsPlugin"/>
+        <plugin name="user_save"
+                type="Magento\AdminAdobeIms\Plugin\UserSavePlugin"/>
+        <plugin name="change_perform_identity_check_message"
+                type="Magento\AdminAdobeIms\Plugin\PerformIdentityCheckMessagePlugin"/>
     </type>
-
-    <type name="Magento\AdminAdobeIms\Service\ImsCommandValidationService">
-        <arguments>
-            <argument name="organizationIdRegex" xsi:type="string"><![CDATA[/^([A-Z0-9]{24})(@AdobeOrg)?$/i]]></argument>
-            <argument name="clientIdRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
-            <argument name="clientSecretRegex" xsi:type="string"><![CDATA[/[^a-z_\-0-9]/i]]></argument>
-            <argument name="twoFactorAuthRegex" xsi:type="string"><![CDATA[/^y/i]]></argument>
-        </arguments>
+    <type name="Magento\User\Model\UserValidationRules">
+        <plugin name="remove_user_validation_rules"
+                type="Magento\AdminAdobeIms\Plugin\RemoveUserValidationRulesPlugin"/>
     </type>
-
-    <type name="Magento\Captcha\Observer\CheckUserLoginBackendObserver">
-        <plugin name="captcha_check_user_login_backend_observer_plugin"
-                type="Magento\AdminAdobeIms\Plugin\CheckUserLoginBackendObserverPlugin"/>
+    <type name="Magento\User\Model\Backend\Config\ObserverConfig">
+        <plugin name="disable_password_reset"
+                type="Magento\AdminAdobeIms\Plugin\DisablePasswordResetPlugin"/>
+        <plugin name="disable_forced_password_change"
+                type="Magento\AdminAdobeIms\Plugin\DisableForcedPasswordChangePlugin"/>
     </type>
-
-    <type name="Magento\Captcha\Observer\ResetAttemptForBackendObserver">
-        <plugin name="captcha_reset_attempt_for_backend_observer_plugin"
-                type="Magento\AdminAdobeIms\Plugin\ResetAttemptForBackendObserverPlugin"/>
+    <type name="Magento\Backend\Block\Widget\Form">
+        <plugin name="remove_password_and_user_confirmation_form_fields"
+                type="Magento\AdminAdobeIms\Plugin\RemovePasswordAndUserConfirmationFormFieldsPlugin" sortOrder="10"/>
+        <plugin name="update_and_user_confirmation_form_fields"
+                type="Magento\AdminAdobeIms\Plugin\UpdateUserFormFieldsPlugin" sortOrder="20"/>
     </type>
-
-    <virtualType name="Magento\AdminAdobeIms\Logger\Handler" type="Magento\Framework\Logger\Handler\Base">
-        <arguments>
-            <argument name="fileName" xsi:type="string">/var/log/admin_adobe_ims.log</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\AdminAdobeIms\Logger\AdminAdobeImsLogger">
-        <arguments>
-            <argument name="enabled" xsi:type="string">1</argument>
-            <argument name="name" xsi:type="string">admin_adobe_ims_logger</argument>
-            <argument name="handlers"  xsi:type="array">
-                <item name="system" xsi:type="object">Magento\AdminAdobeIms\Logger\Handler</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Backend\Model\Auth">
-        <plugin name="disable_admin_login_auth"
-                type="Magento\AdminAdobeIms\Plugin\DisableAdminLoginAuthPlugin"/>
-    </type>
-
     <type name="Magento\Integration\Model\AdminTokenService">
-        <plugin name="admin_adobe_ims_admin_token_plugin"
-                type="Magento\AdminAdobeIms\Plugin\AdminTokenPlugin" />
+        <plugin name="revoke_admin_access_token"
+                type="Magento\AdminAdobeIms\Plugin\RevokeAdminAccessTokenPlugin"/>
+    </type>
+    <type name="Magento\Security\Model\AdminSessionsManager">
+        <plugin name="keep_other_user_sessions"
+                type="Magento\AdminAdobeIms\Plugin\OtherUserSessionPlugin"/>
     </type>
 
-    <type name="Magento\Backend\Model\Auth\Session">
-        <plugin name="admin_adobe_ims_backend_auth_session"
-                type="Magento\AdminAdobeIms\Plugin\BackendAuthSessionPlugin"/>
+    <type name="Magento\User\Block\User\Edit\Tab\Main">
+        <plugin name="admin_adobe_ims_reauth_button_user_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\User\Edit\Tab\AddReAuthVerification"/>
+    </type>
+
+    <type name="Magento\Backend\Block\System\Account\Edit\Form">
+        <plugin name="admin_adobe_ims_reauth_button_account_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\System\Account\Edit\AddReAuthVerification"/>
+    </type>
+
+    <type name="Magento\User\Block\Role\Tab\Info">
+        <plugin name="admin_adobe_ims_reauth_button_role_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\User\Role\Tab\AddReAuthVerification"/>
+    </type>
+    <type name="Magento\AdobeIms\Block\Adminhtml\SignIn">
+        <plugin name="authentication_component_config"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\SignInPlugin"/>
+    </type>
+
+    <type name="Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info">
+        <plugin name="admin_adobe_ims_reauth_button_integration_edit"
+                type="Magento\AdminAdobeIms\Plugin\Block\Adminhtml\Integration\Edit\Tab\AddReAuthVerification"/>
+    </type>
+
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="adobeImsTokenUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\AdminAdobeIms\Model\Authorization\AdobeImsAdminTokenUserContext\Proxy</item>
+                    <item name="sortOrder" xsi:type="string">20</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
 </config>
