@@ -58,9 +58,8 @@ class ConfigTest extends TestCase
     private const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_ims/integration/logout_url';
     private const LOGOUT_URL = 'https://logout-url.com/pattern';
     private const LOGOUT_URL_PATTERN = 'https://logout-url.com/pattern' .
-    '?access_token=#{access_token}&redirect_uri=#{redirect_uri}';
+    '?redirect_uri=#{redirect_uri}';
     private const REDIRECT_URI = 'REDIRECT_URI';
-    private const ACCCESS_TOKEN = 'ACCCESS_TOKEN';
 
     /**
      * Profile image URL constants
@@ -216,9 +215,8 @@ class ConfigTest extends TestCase
             ]);
 
         $this->assertEquals(
-            'https://logout-url.com/pattern?access_token=' . self::ACCCESS_TOKEN .
-                '&redirect_uri=' . self::REDIRECT_URI,
-            $this->config->getLogoutUrl(self::ACCCESS_TOKEN, self::REDIRECT_URI)
+            'https://logout-url.com/pattern?redirect_uri=' . self::REDIRECT_URI,
+            $this->config->getLogoutUrl(self::REDIRECT_URI)
         );
     }
 

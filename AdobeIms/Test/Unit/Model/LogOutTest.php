@@ -109,7 +109,7 @@ class LogOutTest extends TestCase
             ->method('addHeader')
             ->willReturn(null);
         $curl->expects($this->once())
-            ->method('get')
+            ->method('post')
             ->willReturnSelf();
         $curl->expects($this->once())
             ->method('getStatus')
@@ -146,7 +146,7 @@ class LogOutTest extends TestCase
             ->method('addHeader')
             ->willReturn(null);
         $curl->expects($this->once())
-            ->method('get')
+            ->method('post')
             ->willReturnSelf();
         $curl->expects($this->once())
             ->method('getStatus')
@@ -185,7 +185,7 @@ class LogOutTest extends TestCase
             ->method('addHeader')
             ->willReturn(null);
         $curl->expects($this->once())
-            ->method('get')
+            ->method('post')
             ->willReturnSelf();
         $curl->expects($this->once())
             ->method('getStatus')
