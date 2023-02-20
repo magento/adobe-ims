@@ -64,6 +64,8 @@
     <type name="Magento\Backend\Model\Auth">
         <plugin name="disable_admin_login_auth"
                 type="Magento\AdminAdobeIms\Plugin\DisableAdminLoginAuthPlugin"/>
+        <plugin name="admin_ims_auth_validate_access_token"
+                type="Magento\AdminAdobeIms\Plugin\ValidateAccessTokenPlugin"/>
     </type>
 
     <type name="Magento\Integration\Model\AdminTokenService">
