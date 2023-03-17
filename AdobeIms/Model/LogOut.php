@@ -161,8 +161,12 @@ class LogOut implements LogOutInterface
         $curl->addHeader('cache-control', 'no-cache');
 
         $curl->post(
-            $this->config->getBackendLogoutUrl($accessToken),
-            []
+            $this->config->getBackendLogoutUrl(),
+            [
+                'access_token' => $accessToken,
+                'client_secret' => $this->config->getPrivateKey(),
+                'client_id' => $this->config->getApiKey()
+            ]
         );
 
         if ($curl->getStatus() !== self::HTTP_OK || ($this->checkUserProfile($accessToken))) {

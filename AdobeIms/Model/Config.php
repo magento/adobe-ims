@@ -130,8 +130,8 @@ class Config implements ConfigInterface
     public function getTokenUrl(): string
     {
         return str_replace(
-            ['#{imsUrl}'],
-            [$this->getImsUrl()],
+            '#{imsUrl}',
+            $this->getImsUrl(),
             $this->scopeConfig->getValue(self::XML_PATH_TOKEN_URL)
         );
     }
@@ -175,7 +175,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getLogoutUrl(string $accessToken, string $redirectUrl = '') : string
+    public function getLogoutUrl(string $accessToken, string $redirectUrl = ''): string
     {
         // there is no success response with empty redirect url
         if ($redirectUrl === '') {
@@ -217,15 +217,13 @@ class Config implements ConfigInterface
     /**
      * Get Token validation url
      *
-     * @param string $code
-     * @param string $tokenType
      * @return string
      */
-    public function getValidateTokenUrl(string $code, string $tokenType): string
+    public function getValidateTokenUrl(): string
     {
         return str_replace(
-            ['#{imsUrl}', '#{token}', '#{client_id}', '#{token_type}'],
-            [$this->getImsUrl(), $code, $this->getApiKey(), $tokenType],
+            '#{imsUrl}',
+            $this->getImsUrl(),
             $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL)
         );
     }
@@ -280,14 +278,13 @@ class Config implements ConfigInterface
     /**
      * Get BackendLogout URL
      *
-     * @param string $accessToken
      * @return string
      */
-    public function getBackendLogoutUrl(string $accessToken) : string
+    public function getBackendLogoutUrl(): string
     {
         return str_replace(
-            ['#{imsUrl}', '#{access_token}', '#{client_secret}', '#{client_id}'],
-            [$this->getImsUrl(), $accessToken, $this->getPrivateKey(), $this->getApiKey()],
+            '#{imsUrl}',
+            $this->getImsUrl(),
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_LOGOUT_URL)
         );
     }

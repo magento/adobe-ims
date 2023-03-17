@@ -24,9 +24,9 @@
                 <organization_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <profile_url><![CDATA[#{imsUrl}/ims/profile/v1?client_id=#{client_id}]]></profile_url>
                 <organization_membership_url><![CDATA[#{organizationMembershipUrl}/#{org_id}@AdobeOrg/membership]]></organization_membership_url>
-                <admin_logout_url><![CDATA[#{imsUrl}/ims/logout/v1?access_token=#{access_token}&client_id=#{client_id}&client_secret=#{client_secret}]]></admin_logout_url>
+                <admin_logout_url><![CDATA[#{imsUrl}/ims/logout/v1]]></admin_logout_url>
                 <certificate_path><![CDATA[#{certificateUrl}/keys/prod/]]></certificate_path>
-                <validate_token_url><![CDATA[#{imsUrl}/ims/validate_token/v1?token=#{token}&client_id=#{client_id}&type=#{token_type}]]></validate_token_url>
+                <validate_token_url><![CDATA[#{imsUrl}/ims/validate_token/v1]]></validate_token_url>
                 <organizationMembershipUrl>https://graph.identity.adobe.com</organizationMembershipUrl>
                 <certificateUrl>https://static.adobelogin.com</certificateUrl>
             </integration>
