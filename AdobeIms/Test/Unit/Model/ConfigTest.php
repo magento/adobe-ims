@@ -11,6 +11,7 @@ use Magento\AdobeIms\Model\Config;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Data\Form\FormKey;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -99,8 +100,8 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->urlMock = $this->createMock(UrlInterface::class);
-
-        $this->config = new Config($this->scopeConfigMock, $this->urlMock);
+        $formKeyMock = $this->createMock(FormKey::class);
+        $this->config = new Config($this->scopeConfigMock, $this->urlMock, $formKeyMock);
     }
 
     /**
@@ -180,8 +181,8 @@ class ConfigTest extends TestCase
 
         $this->assertEquals(
             'https://auth-url.com/pattern?client_id=' . self::API_KEY .
-                '&redirect_uri=' . self::CALLBACK_URL .
-                '&locale=' . self::LOCALE_CODE,
+            '&redirect_uri=' . self::CALLBACK_URL .
+            '&locale=' . self::LOCALE_CODE,
             $this->config->getAuthUrl()
         );
     }
@@ -217,7 +218,7 @@ class ConfigTest extends TestCase
 
         $this->assertEquals(
             'https://logout-url.com/pattern?access_token=' . self::ACCCESS_TOKEN .
-                '&redirect_uri=' . self::REDIRECT_URI,
+            '&redirect_uri=' . self::REDIRECT_URI,
             $this->config->getLogoutUrl(self::ACCCESS_TOKEN, self::REDIRECT_URI)
         );
     }

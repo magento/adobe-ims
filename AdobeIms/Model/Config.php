@@ -16,6 +16,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Data\Form\FormKey;
 
 /**
  * Represent the Adobe IMS config model responsible for retrieving config settings for Adobe Ims
@@ -51,12 +52,12 @@ class Config implements ConfigInterface
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
 
     /**
      * @var UrlInterface
      */
-    private $url;
+    private UrlInterface $url;
 
     /**
      * @var WriterInterface
@@ -74,10 +75,16 @@ class Config implements ConfigInterface
     private BackendUrlInterface $backendUrl;
 
     /**
+     * @var FormKey
+     */
+    private FormKey $formKey;
+
+    /**
      * Config constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
+     * @param FormKey $formKey
      * @param WriterInterface|null $writer
      * @param EncryptorInterface|null $encryptor
      * @param BackendUrlInterface|null $backendUrl
@@ -85,18 +92,20 @@ class Config implements ConfigInterface
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
+        FormKey $formKey,
         WriterInterface $writer = null,
         EncryptorInterface $encryptor = null,
         BackendUrlInterface $backendUrl = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->url = $url;
+        $this->formKey = $formKey;
         $this->writer = $writer ?? ObjectManager::getInstance()
-                ->get(WriterInterface::class);
+            ->get(WriterInterface::class);
         $this->encryptor = $encryptor ?? ObjectManager::getInstance()
-                ->get(EncryptorInterface::class);
+            ->get(EncryptorInterface::class);
         $this->backendUrl = $backendUrl ?? ObjectManager::getInstance()
-                ->get(BackendUrlInterface::class);
+            ->get(BackendUrlInterface::class);
     }
 
     /**
@@ -234,12 +243,13 @@ class Config implements ConfigInterface
         }
 
         return str_replace(
-            ['#{imsUrl}', '#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{imsUrl}', '#{client_id}', '#{redirect_uri}', '#{scope}', '#{state}' ,'#{locale}'],
             [
                 $this->getImsUrl(),
                 $clientId,
                 $this->getAdminAdobeImsCallBackUrl(),
                 $this->getAdminScopes(),
+                $this->formKey->getFormKey(),
                 $this->getLocale()
             ],
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_AUTH_URL_PATTERN)
@@ -254,12 +264,13 @@ class Config implements ConfigInterface
     public function getAdminAdobeImsReAuthUrl(): string
     {
         return str_replace(
-            ['#{imsUrl}', '#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{imsUrl}', '#{client_id}', '#{redirect_uri}', '#{scope}', '#{state}', '#{locale}'],
             [
                 $this->getImsUrl(),
                 $this->getApiKey(),
                 $this->getAdminAdobeImsReAuthCallBackUrl(),
                 $this->getAdminScopes(),
+                $this->formKey->getFormKey(),
                 $this->getLocale()
             ],
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_REAUTH_URL_PATTERN)
