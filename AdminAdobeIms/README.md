@@ -8,6 +8,8 @@ For information about module installation in Magento 2, see [Enable or disable m
 Enables the AdminAdobeIMS Module. \
 Required values are `Organization ID`, `Client ID`, `Client Secret` and `2FA enabled`
 
+When AdminAdobeIms module is enabled, new role `Adobe Ims` is created by default.
+
 ### Argument Validation
 On enabling the AdminAdobeIMS Module, the input arguments will be validated. \
 The pattern for the validation are configured in the di.xml
@@ -23,7 +25,7 @@ The pattern for the validation are configured in the di.xml
 </type>
 ```
 
-We check if the arguments are not empty, as they are all required. 
+We check if the arguments are not empty, as they are all required.
 
 For the Organization ID, Client ID and Client Secret, we check if they contain only alphanumeric characters. \
 Additionally for the Organization ID, we check if it matches 24 characters and optional has the suffix `@AdobeOrg`. But we only store the ID and ignore the suffix.
@@ -61,10 +63,21 @@ To rebuild the minified css run the command `./node_modules/.bin/postcss -o dist
 # AdminAdobeIMS Callback
 For the AdobeIMS Login we provide a redirect_uri on the request. After a successful Login in AdobeIMS, we get redirected to provided redirect_uri.
 
-In the ImsCallback Controller we get the access_token and then the user profile.
-We then check if the assigned organization is valid and if the user does exist in the Magento database, before we complete the user login in Magento.
+In the ImsCallback Controller, we call the UserContextInterface and redirected to AdobeImsAdminTokenUserContext which is responsible for Authorization related operations.
 
-If there went something wrong during the authorization, the user gets redirected to the admin login page and an error message is shown.
+If something went wrong during the authorization, the user gets redirected to the admin login page and an error message is shown.
+
+There is a dispatch method created for validating the state of IMS. To prevent CSRF Threat against OAuth 2 redirect-uri, an additional param ‘state’ is added to the redirect URL and the code is verifying whether it is the same returned after authentication from IMS.
+
+# AdobeImsAdminTokenUserContext Authorization
+This provides a unified way of implementing UserContextInterface for authorization and login to the Admin Panel. Model class method getUserId() ensures the user is already logged in by checking if access_token is already present in the session and returns the user id.
+
+If not logged in, it calls AdobeImsAdminTokenUserService and authenticates an admin user by getting access_token and redirecting to Admin Dashboard if login is successful in AdobeIMS.
+
+# AdobeImsAdminTokenUserService Service
+In the AdobeImsAdminTokenUserService service class, we call AdobeIMS API and get the access_token. After that, we get the user profile and also verify if the assigned organization is valid. If the user exists in the Magento database, it gets successfully logged in to Magento Admin.
+
+If the user doesn't exist in Magento database, it creates the user with new role `Adobe Ims` assigned and profile info gets inherited from AdobeIMS.
 
 # Organization ID Validation
 During the authorization we check if the configured `Organization ID` provided on the enabling CLI command is assigned to the user.
@@ -78,8 +91,8 @@ Login with the help Adobe IMS Service is implemented. The redirect to Adobe IMS 
 The redirect from Adobe IMS is done to \Magento\AdminAdobeIms\Controller\Adminhtml\OAuth\ImsCallback controller.
 
 The access code comes from Adobe, the token response is got on the basis of the access code,
-client id (api key) and client secret (private key). 
-The token response access token is used for getting user profile information. 
+client id (api key) and client secret (private key).
+The token response access token is used for getting user profile information.
 If this is successful, the admin user will be logged in and the access tokens is added to session as well as token_last_check_time value.
 
 # ACCESS_TOKEN saving in session and validation
@@ -122,7 +135,7 @@ Will be thrown when the admin user who wants to log in does not have the configu
 ### Error logging
 Whenever an exception is thrown during the Adobe IMS Login, we will log the specific exception message but show a general error message on the admin login form.
 
-Errors are logged into the `/var/log/admin_adobe_ims.log` file. 
+Errors are logged into the `/var/log/admin_adobe_ims.log` file.
 
 Logging can be enabled or disabled in the config on changing the value for `adobe_ims\integration\logging_enabled` or in the Magento Admin Configuration under `Advanced > Developer > Debug`. \
 There you can switch the toggle for `Enable Logging for Admin Adobe IMS Module`
@@ -132,7 +145,7 @@ When the AdobeAdminIMS Module is enabled, we do not need any password fields in 
 
 So we removed the "Password" and "Password Confirmation" fields of the user forms.
 This is done by the plugin `\Magento\AdminAdobeIms\Plugin\RemovePasswordAndUserConfirmationFormFieldsPlugin`.
-Here we remove the password and password confirmation field. 
+Here we remove the password and password confirmation field.
 As the verification field is just hidden, we set a random password to bypass the input filters of the Save and Delete user Classes.
 The `\Magento\AdminAdobeIms\Plugin\RemoveUserValidationRulesPlugin` plugin is required to remove the password fields from the form validation.
 We update the "Current User Identity Verification" fieldset to add "Verify Identity with Adobe IMS" button instead "Your Password" field.
@@ -140,7 +153,7 @@ This is done by the plugins: `Magento\AdminAdobeIms\Plugin\Block\Adminhtml\User\
 
 As we update the current user verification field, we have the `\Magento\AdminAdobeIms\Plugin\ReplaceVerifyIdentityWithImsPlugin` plugin to verify the `AdobeReAuthToken` of the current admin user in AdobeIMS and only proceed when it is valid.
 
-For the newly created user will be a random password generated, as we did not modify the admin_user table, where the password field can not be null. 
+For the newly created user will be a random password generated, as we did not modify the admin_user table, where the password field can not be null.
 This is done in the `\Magento\AdminAdobeIms\Plugin\UserSavePlugin`.
 
 We also disabled the "Change password in 30 days" functionally, as we don't need the Magento admin user password for the login.
@@ -155,7 +168,7 @@ These admin user credentials are needed for getting token that can be used to ma
 It means that will be not possible to create token because admin doesn't have credentials. In these case we have to use IMS access token.
 
 `\Magento\AdminAdobeIms\Model\Authorization\AdobeImsTokenUserContext` new implementation for `\Magento\Authorization\Model\UserContextInterface` was created.
-In the implementation IMS access token is validated and read to get created_at and expires_in data. 
+In the implementation IMS access token is validated and read to get created_at and expires_in data.
 If access_token_hash already exists in admin_adobe_ims_webapi table, then we can get admin_user_id.
 If access_token_hash does not exist in admin_adobe_ims_webapi table, then we have to make request to IMS service to get Adobe user profile, that contain email.
 Using email from Adobe user profile we can check if admin user with these email exists in Magento. If so, we save relevant data into admin_adobe_ims_webapi table.
@@ -173,7 +186,7 @@ Both of values are checked in function isTokenExpired \Magento\AdminAdobeIms\Mod
 it means that with default values is not possible to use tokens that older than 4h.
 
 ### IMS access token verification.
-To verify token a public key is required. For more info https://wiki.corp.adobe.com/display/ims/IMS+public+key+retrieval 
+To verify token a public key is required. For more info https://wiki.corp.adobe.com/display/ims/IMS+public+key+retrieval
 In Admin Adobe Ims module was defined path where certificate has to be downloaded from.
 By default, in config.xml, these value for production.
 For testing reasons, developers can override this value, for example in env.php file like this:
@@ -213,7 +226,7 @@ By clicking on this button a popup opens with the AdobeIms Login, where the curr
 After successfully validate his identity, we are redirecting to the `Magento/AdminAdobeIms/Controller/Adminhtml/OAuth/ImsReauthCallback.php` Controller and update the `ims_verified` field.
 
 When the form will be submitted, we verify the identity with the `Magento/AdminAdobeIms/Plugin/ReplaceVerifyIdentityWithImsPlugin.php` Plugin.
-Here the existens of the `AdobeAccessToken` and `AdobeReAuthToken` will be checked.
+Here the existence of the `AdobeAccessToken` and `AdobeReAuthToken` will be checked.
 The reauth_token will be used to call the AdobeIms validateToken Endpoint.
 
 When this call is successful, the form will be submitted, otherwise we update the Message of the thrown `AuthenticationException` to return a matching error message, done by the `Magento/AdminAdobeIms/Plugin/PerformIdentityCheckMessagePlugin.php` Plugin.
