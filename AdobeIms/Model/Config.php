@@ -23,6 +23,8 @@ use Magento\Framework\Data\Form\FormKey;
  */
 class Config implements ConfigInterface
 {
+    private const DEFAULT_IMS_URL = 'https://ims-na1.adobelogin.com';
+
     private const XML_CONFIG_PATH = 'adobe_ims/integration/';
     public const XML_PATH_ENABLED = 'adobe_ims/integration/admin_enabled';
     private const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
@@ -353,7 +355,7 @@ class Config implements ConfigInterface
      */
     private function getImsUrl(string $urlType = 'imsUrl'): string
     {
-        return $this->scopeConfig->getValue(self::XML_CONFIG_PATH . $urlType);
+        return $this->scopeConfig->getValue(self::XML_CONFIG_PATH . $urlType) ?? self::DEFAULT_IMS_URL;
     }
 
     /**
