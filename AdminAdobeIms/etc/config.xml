@@ -29,6 +29,7 @@
                 <validate_token_url><![CDATA[#{imsUrl}/ims/validate_token/v1]]></validate_token_url>
                 <organizationMembershipUrl>https://graph.identity.adobe.com</organizationMembershipUrl>
                 <certificateUrl>https://static.adobelogin.com</certificateUrl>
+                <imsUrl>https://ims-na1.adobelogin.com</imsUrl>
             </integration>
             <email>
                 <header_template>admin_adobe_ims_email_header_template</header_template>
