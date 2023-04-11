@@ -77,11 +77,9 @@ interface ConfigInterface
     /**
      * Get Token validation url
      *
-     * @param string $code
-     * @param string $tokenType
      * @return string
      */
-    public function getValidateTokenUrl(string $code, string $tokenType): string;
+    public function getValidateTokenUrl(): string;
 
     /**
      * Generate the AdminAdobeIms AuthUrl with given clientID or the ClientID stored in the config
@@ -101,10 +99,9 @@ interface ConfigInterface
     /**
      * Get BackendLogout URL
      *
-     * @param string $accessToken
      * @return string
      */
-    public function getBackendLogoutUrl(string $accessToken): string;
+    public function getBackendLogoutUrl(): string;
 
     /**
      * IMS certificate (public key) location retrieval

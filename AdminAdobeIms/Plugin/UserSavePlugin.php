@@ -9,7 +9,9 @@ namespace Magento\AdminAdobeIms\Plugin;
 
 use Exception;
 use Magento\AdminAdobeIms\Service\ImsConfig;
+use Magento\User\Model\ResourceModel\User as UserResourceModel;
 use Magento\User\Model\User;
+use Magento\User\Model\UserFactory;
 
 class UserSavePlugin
 {
@@ -19,17 +21,34 @@ class UserSavePlugin
     private ImsConfig $adminImsConfig;
 
     /**
+     * @var UserFactory
+     */
+    private UserFactory $userFactory;
+
+    /**
+     * @var UserResourceModel
+     */
+    private UserResourceModel $userResource;
+
+    /**
      * @param ImsConfig $adminImsConfig
+     * @param UserFactory $userFactory
+     * @param UserResourceModel $userResource
      */
     public function __construct(
-        ImsConfig $adminImsConfig
+        ImsConfig $adminImsConfig,
+        UserFactory $userFactory,
+        UserResourceModel $userResource
     ) {
         $this->adminImsConfig = $adminImsConfig;
+        $this->userFactory = $userFactory;
+        $this->userResource = $userResource;
     }
 
     /**
      * Generate a random password for new user when AdminAdobeIMS Module is enabled
      *
+     * And revert firstname, lastname, username, email, and InterfaceLocale to original for saved user.
      * We create a random password for the user, because User Object needs to have a password
      * and this way we do not need to update the db_schema or add a lot of complex preferences
      *
@@ -46,8 +65,29 @@ class UserSavePlugin
         if (!$subject->getId()) {
             $subject->setPassword($this->generateRandomPassword());
         }
+        $this->revertReadonlyFieldsData($subject);
 
         return [];
+    }
+
+    /**
+     * Revert fields to original state because these fields are readonly for IMS User
+     *
+     * @param User $subject
+     * @return void
+     */
+    private function revertReadonlyFieldsData(User $subject): void
+    {
+        if ($subject->hasDataChanges() && $subject->getId()) {
+            $savedUser = $this->userFactory->create();
+            $this->userResource->load($savedUser, $subject->getId());
+
+            $subject->setUserName($savedUser->getUserName());
+            $subject->setEmail($savedUser->getEmail());
+            $subject->setFirstName($savedUser->getFirstName());
+            $subject->setLastName($savedUser->getLastName());
+            $subject->setInterfaceLocale($savedUser->getInterfaceLocale());
+        }
     }
 
     /**

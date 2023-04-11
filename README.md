@@ -7,10 +7,8 @@ Adobe IMS Integration is a package that enables integration between Magento and 
 Adobe IMS Integration was initially developed in scope of Adobe Stock Integration.
 
 ## Documentation
-
-- Complete documentation located on the project [wiki pages](https://github.com/magento/adobe-stock-integration/wiki)   
-- Project [roadmap](https://github.com/magento/adobe-stock-integration/wiki/Adobe-Stock-Image-Integration-Roadmap) contains information about project phases and stories for each phase 
-- How to start local development described in the [installation guide](https://github.com/magento/adobe-stock-integration/wiki/Installation-Guide)
+- How to start local development described in the [installation guide](https://github.com/magento/adobe-ims/wiki/Installation)
+- Complete documentation located on the project [wiki pages](https://github.com/magento/adobe-ims/wiki)
 
 ## Community Engineering Slack
 

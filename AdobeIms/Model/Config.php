@@ -16,12 +16,15 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Data\Form\FormKey;
 
 /**
  * Represent the Adobe IMS config model responsible for retrieving config settings for Adobe Ims
  */
 class Config implements ConfigInterface
 {
+    private const DEFAULT_IMS_URL = 'https://ims-na1.adobelogin.com';
+
     private const XML_CONFIG_PATH = 'adobe_ims/integration/';
     public const XML_PATH_ENABLED = 'adobe_ims/integration/admin_enabled';
     private const XML_PATH_ORGANIZATION_ID = 'adobe_ims/integration/organization_id';
@@ -51,12 +54,12 @@ class Config implements ConfigInterface
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    protected ScopeConfigInterface $scopeConfig;
 
     /**
      * @var UrlInterface
      */
-    private $url;
+    private UrlInterface $url;
 
     /**
      * @var WriterInterface
@@ -74,10 +77,16 @@ class Config implements ConfigInterface
     private BackendUrlInterface $backendUrl;
 
     /**
+     * @var FormKey
+     */
+    private FormKey $formKey;
+
+    /**
      * Config constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param UrlInterface $url
+     * @param FormKey $formKey
      * @param WriterInterface|null $writer
      * @param EncryptorInterface|null $encryptor
      * @param BackendUrlInterface|null $backendUrl
@@ -85,18 +94,20 @@ class Config implements ConfigInterface
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         UrlInterface $url,
+        FormKey $formKey,
         WriterInterface $writer = null,
         EncryptorInterface $encryptor = null,
         BackendUrlInterface $backendUrl = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->url = $url;
+        $this->formKey = $formKey;
         $this->writer = $writer ?? ObjectManager::getInstance()
-                ->get(WriterInterface::class);
+            ->get(WriterInterface::class);
         $this->encryptor = $encryptor ?? ObjectManager::getInstance()
-                ->get(EncryptorInterface::class);
+            ->get(EncryptorInterface::class);
         $this->backendUrl = $backendUrl ?? ObjectManager::getInstance()
-                ->get(BackendUrlInterface::class);
+            ->get(BackendUrlInterface::class);
     }
 
     /**
@@ -121,8 +132,8 @@ class Config implements ConfigInterface
     public function getTokenUrl(): string
     {
         return str_replace(
-            ['#{imsUrl}'],
-            [$this->getImsUrl()],
+            '#{imsUrl}',
+            $this->getImsUrl(),
             $this->scopeConfig->getValue(self::XML_PATH_TOKEN_URL)
         );
     }
@@ -166,7 +177,7 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getLogoutUrl(string $accessToken, string $redirectUrl = '') : string
+    public function getLogoutUrl(string $accessToken, string $redirectUrl = ''): string
     {
         // there is no success response with empty redirect url
         if ($redirectUrl === '') {
@@ -208,15 +219,13 @@ class Config implements ConfigInterface
     /**
      * Get Token validation url
      *
-     * @param string $code
-     * @param string $tokenType
      * @return string
      */
-    public function getValidateTokenUrl(string $code, string $tokenType): string
+    public function getValidateTokenUrl(): string
     {
         return str_replace(
-            ['#{imsUrl}', '#{token}', '#{client_id}', '#{token_type}'],
-            [$this->getImsUrl(), $code, $this->getApiKey(), $tokenType],
+            '#{imsUrl}',
+            $this->getImsUrl(),
             $this->scopeConfig->getValue(self::XML_PATH_VALIDATE_TOKEN_URL)
         );
     }
@@ -234,12 +243,13 @@ class Config implements ConfigInterface
         }
 
         return str_replace(
-            ['#{imsUrl}', '#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{imsUrl}', '#{client_id}', '#{redirect_uri}', '#{scope}', '#{state}' ,'#{locale}'],
             [
                 $this->getImsUrl(),
                 $clientId,
                 $this->getAdminAdobeImsCallBackUrl(),
                 $this->getAdminScopes(),
+                $this->formKey->getFormKey(),
                 $this->getLocale()
             ],
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_AUTH_URL_PATTERN)
@@ -254,12 +264,13 @@ class Config implements ConfigInterface
     public function getAdminAdobeImsReAuthUrl(): string
     {
         return str_replace(
-            ['#{imsUrl}', '#{client_id}', '#{redirect_uri}', '#{scope}', '#{locale}'],
+            ['#{imsUrl}', '#{client_id}', '#{redirect_uri}', '#{scope}', '#{state}', '#{locale}'],
             [
                 $this->getImsUrl(),
                 $this->getApiKey(),
                 $this->getAdminAdobeImsReAuthCallBackUrl(),
                 $this->getAdminScopes(),
+                $this->formKey->getFormKey(),
                 $this->getLocale()
             ],
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_REAUTH_URL_PATTERN)
@@ -269,14 +280,13 @@ class Config implements ConfigInterface
     /**
      * Get BackendLogout URL
      *
-     * @param string $accessToken
      * @return string
      */
-    public function getBackendLogoutUrl(string $accessToken) : string
+    public function getBackendLogoutUrl(): string
     {
         return str_replace(
-            ['#{imsUrl}', '#{access_token}', '#{client_secret}', '#{client_id}'],
-            [$this->getImsUrl(), $accessToken, $this->getPrivateKey(), $this->getApiKey()],
+            '#{imsUrl}',
+            $this->getImsUrl(),
             $this->scopeConfig->getValue(self::XML_PATH_ADMIN_LOGOUT_URL)
         );
     }
@@ -345,7 +355,7 @@ class Config implements ConfigInterface
      */
     private function getImsUrl(string $urlType = 'imsUrl'): string
     {
-        return $this->scopeConfig->getValue(self::XML_CONFIG_PATH . $urlType);
+        return $this->scopeConfig->getValue(self::XML_CONFIG_PATH . $urlType) ?? self::DEFAULT_IMS_URL;
     }
 
     /**

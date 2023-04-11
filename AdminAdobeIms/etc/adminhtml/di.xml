@@ -51,6 +51,8 @@
     <type name="Magento\Backend\Block\Widget\Form">
         <plugin name="remove_password_and_user_confirmation_form_fields"
                 type="Magento\AdminAdobeIms\Plugin\RemovePasswordAndUserConfirmationFormFieldsPlugin"/>
+        <plugin name="update_and_user_confirmation_form_fields"
+                type="Magento\AdminAdobeIms\Plugin\UpdateUserFormFieldsPlugin" sortOrder="20"/>
     </type>
     <type name="Magento\Integration\Model\AdminTokenService">
         <plugin name="revoke_admin_access_token"

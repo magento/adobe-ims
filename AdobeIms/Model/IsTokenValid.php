@@ -76,8 +76,12 @@ class IsTokenValid implements IsTokenValidInterface
         $curl->addHeader('cache-control', 'no-cache');
 
         $curl->post(
-            $this->config->getValidateTokenUrl($token, $tokenType),
-            []
+            $this->config->getValidateTokenUrl(),
+            [
+                'token' => $token,
+                'type' => $tokenType,
+                'client_id' => $this->config->getApiKey()
+            ]
         );
 
         if ($curl->getBody() === '') {
