@@ -11,6 +11,7 @@ use Magento\AdobeIms\Model\Config;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\Data\Form\FormKey;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +20,9 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
+    private const IMS_URL = 'https://cc-api-behance.adobe.io';
 
+    private const XML_CONFIG_PATH = 'adobe_ims/integration/';
     /**
      * API key constants
      */
@@ -35,7 +38,7 @@ class ConfigTest extends TestCase
     /**
      * Token URL constants
      */
-    private const TOKEN_URL = 'https://token-url.com/integration';
+    private const TOKEN_URL = '/ims/validate_token/v1';
     private const XML_PATH_TOKEN_URL = 'adobe_ims/integration/token_url';
 
     /**
@@ -43,6 +46,7 @@ class ConfigTest extends TestCase
      */
     private const LOCALE_CODE = 'en_US';
     private const XML_PATH_AUTH_URL_PATTERN = 'adobe_ims/integration/auth_url_pattern';
+    private const AUTH_URL = 'https://auth-url.com/pattern';
     private const AUTH_URL_PATTERN = 'https://auth-url.com/pattern' .
     '?client_id=#{client_id}&redirect_uri=#{redirect_uri}&locale=#{locale}';
 
@@ -55,6 +59,7 @@ class ConfigTest extends TestCase
      * Logout URL constants
      */
     private const XML_PATH_LOGOUT_URL_PATTERN = 'adobe_ims/integration/logout_url';
+    private const LOGOUT_URL = 'https://logout-url.com/pattern';
     private const LOGOUT_URL_PATTERN = 'https://logout-url.com/pattern' .
     '?access_token=#{access_token}&redirect_uri=#{redirect_uri}';
     private const REDIRECT_URI = 'REDIRECT_URI';
@@ -65,12 +70,18 @@ class ConfigTest extends TestCase
      */
     private const XML_PATH_IMAGE_URL_PATTERN = 'adobe_ims/integration/image_url';
     private const IMAGE_URL_PATTERN = 'https://image-url.com/pattern?api_key=#{api_key}';
+    private const IMAGE_URL = 'https://image-url.com/pattern';
 
     /**
      * Default profile image URL constants
      */
     private const XML_PATH_DEFAULT_PROFILE_IMAGE = 'adobe_ims/integration/default_profile_image';
     private const IMAGE_URL_DEFAULT = 'https://image-url.com/default';
+
+    private const XML_PATH_ADOBE_IMS_SCOPES = 'adobe_ims/integration/scopes';
+
+    private const XML_PATH_ADMIN_LOGOUT_URL = 'adobe_ims/integration/admin_logout_url';
+    private const BACKEND_LOGOUT_URL = '/ims/logout/v1';
 
     /**
      * @var Config
@@ -94,8 +105,8 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->urlMock = $this->createMock(UrlInterface::class);
-
-        $this->config = new Config($this->scopeConfigMock, $this->urlMock);
+        $formKeyMock = $this->createMock(FormKey::class);
+        $this->config = new Config($this->scopeConfigMock, $this->urlMock, $formKeyMock);
     }
 
     /**
@@ -128,10 +139,20 @@ class ConfigTest extends TestCase
     public function testGetTokenUrl(): void
     {
         $this->scopeConfigMock->method('getValue')
-            ->with(self::XML_PATH_TOKEN_URL)
-            ->willReturn(self::TOKEN_URL);
+            ->withConsecutive(
+                [
+                    self::XML_CONFIG_PATH . 'imsUrl'
+                ],
+                [
+                    self::XML_PATH_TOKEN_URL
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                self::IMS_URL,
+                '#{imsUrl}' . self::TOKEN_URL
+            );
 
-        $this->assertEquals(self::TOKEN_URL, $this->config->getTokenUrl());
+        $this->assertEquals(self::IMS_URL . self::TOKEN_URL, $this->config->getTokenUrl());
     }
 
     /**
@@ -142,8 +163,16 @@ class ConfigTest extends TestCase
         $this->scopeConfigMock->method('getValue')
             ->willReturnMap([
                 [
+                    self::XML_CONFIG_PATH . 'imsUrl', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    self::AUTH_URL
+                ],
+                [
                     self::XML_PATH_API_KEY, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
                     self::API_KEY
+                ],
+                [
+                    self::XML_PATH_ADOBE_IMS_SCOPES , ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    ['openid']
                 ],
                 [
                     Custom::XML_PATH_GENERAL_LOCALE_CODE, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
@@ -159,8 +188,8 @@ class ConfigTest extends TestCase
 
         $this->assertEquals(
             'https://auth-url.com/pattern?client_id=' . self::API_KEY .
-                '&redirect_uri=' . self::CALLBACK_URL .
-                '&locale=' . self::LOCALE_CODE,
+            '&redirect_uri=' . self::CALLBACK_URL .
+            '&locale=' . self::LOCALE_CODE,
             $this->config->getAuthUrl()
         );
     }
@@ -183,12 +212,20 @@ class ConfigTest extends TestCase
     public function testGetLogoutUrl(): void
     {
         $this->scopeConfigMock->method('getValue')
-            ->with(self::XML_PATH_LOGOUT_URL_PATTERN)
-            ->willReturn(self::LOGOUT_URL_PATTERN);
+            ->willReturnMap([
+                [
+                    self::XML_PATH_LOGOUT_URL_PATTERN, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    self::LOGOUT_URL_PATTERN
+                ],
+                [
+                    self::XML_CONFIG_PATH . 'imsUrl', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    self::LOGOUT_URL
+                ],
+            ]);
 
         $this->assertEquals(
             'https://logout-url.com/pattern?access_token=' . self::ACCCESS_TOKEN .
-                '&redirect_uri=' . self::REDIRECT_URI,
+            '&redirect_uri=' . self::REDIRECT_URI,
             $this->config->getLogoutUrl(self::ACCCESS_TOKEN, self::REDIRECT_URI)
         );
     }
@@ -200,6 +237,10 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfigMock->method('getValue')
             ->willReturnMap([
+                [
+                    self::XML_CONFIG_PATH . 'imageUrl', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
+                    self::IMAGE_URL
+                ],
                 [
                     self::XML_PATH_IMAGE_URL_PATTERN, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null,
                     self::IMAGE_URL_PATTERN
@@ -214,5 +255,27 @@ class ConfigTest extends TestCase
             'https://image-url.com/pattern?api_key=' . self::API_KEY,
             $this->config->getProfileImageUrl()
         );
+    }
+
+    /**
+     * Test for \Magento\AdobeIms\Model\Config::getBackendLogoutUrl
+     */
+    public function testGetBackendLogoutUrl(): void
+    {
+        $this->scopeConfigMock->method('getValue')
+            ->withConsecutive(
+                [
+                    self::XML_CONFIG_PATH . 'imsUrl'
+                ],
+                [
+                    self::XML_PATH_ADMIN_LOGOUT_URL
+                ]
+            )
+            ->willReturnOnConsecutiveCalls(
+                self::IMS_URL,
+                '#{imsUrl}' . self::BACKEND_LOGOUT_URL
+            );
+
+        $this->assertEquals(self::IMS_URL . self::BACKEND_LOGOUT_URL, $this->config->getBackendLogoutUrl());
     }
 }
