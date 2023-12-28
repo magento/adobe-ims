@@ -164,7 +164,7 @@ class AdminAdobeImsEnableCommand extends Command
             if ($clientId && $clientSecret && $organizationId && $isTwoFactorAuthEnabled) {
                 $enabled = $this->enableModule($clientId, $clientSecret, $organizationId, $isTwoFactorAuthEnabled);
                 if ($enabled) {
-                    $output->writeln(__('Admin Adobe IMS integration is enabled'));
+                    $output->writeln(sprintf('Admin Adobe IMS integration is enabled'));
                     return Cli::RETURN_SUCCESS;
                 }
             }
