@@ -76,7 +76,7 @@ class AdminAdobeImsInfoCommand extends Command
                     $output->writeln(self::CLIENT_SECRET_NAME . ' ' . $clientSecret);
                 }
             } else {
-                $output->writeln(__('Module is disabled'));
+                $output->writeln(sprintf('Module is disabled'));
             }
 
             return Cli::RETURN_SUCCESS;
