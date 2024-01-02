@@ -47,7 +47,7 @@ class AdminAdobeImsStatusCommand extends Command
     {
         try {
             $status = $this->getModuleStatus();
-            $output->writeln(sprintf('Admin Adobe IMS integration is %1', $status));
+            $output->writeln(sprintf('Admin Adobe IMS integration is %s', $status));
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
