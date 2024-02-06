@@ -55,7 +55,7 @@ class AdminAdobeImsDisableCommand extends Command
         try {
             $this->adminImsConfig->disableModule();
             $this->cacheTypeList->cleanType(Config::TYPE_IDENTIFIER);
-            $output->writeln(__('Admin Adobe IMS integration is disabled'));
+            $output->writeln(sprintf('Admin Adobe IMS integration is disabled'));
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
