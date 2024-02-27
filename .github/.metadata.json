@@ -8,7 +8,7 @@
     "team":{
       "name":"Arrows",
       "DL":"Grp-RQ-ARROWS",
-      "slackChannel":""
+      "slackChannel":"adobe-ims"
     }
   },
   "ticketTracker":{
