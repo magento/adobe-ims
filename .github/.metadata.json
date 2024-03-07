@@ -1,0 +1,25 @@
+{
+  "templateVersion":"0.2",
+  "product":{
+    "name":"Adobe IMS",
+    "description":"Adobe IMS Integration is a package that enables integration between Adobe Commerce and Adobe IMS to implement Commerce Admin login using Adobe ID."
+  },
+  "contacts":{
+    "team":{
+      "name":"Arrows",
+      "DL":"Grp-RQ-ARROWS",
+      "slackChannel":"adobe-commerce-ims"
+    }
+  },
+  "ticketTracker":{
+    "functionalJiraQueue":{
+      "projectKey":"CABPI",
+      "component":""
+    },
+    "securityJiraQueue":{
+      "projectKey":"CABPI",
+      "component":""
+    }
+  },
+  "productionCodeBranches":["2.2-develop"]
+}
