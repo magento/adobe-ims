@@ -2,7 +2,7 @@
 
 Contributions to the Adobe IMS codebase are done using the fork & pull model.
 This contribution model has contributors maintaining their own fork of the Adobe IMS repository.
-The forked repository is then used to submit a request to the base repository to “pull” a set of changes.
+The forked repository is then used to submit a request to the base repository to "pull" a set of changes.
 For more information on pull requests please refer to [GitHub Help](https://help.github.com/articles/about-pull-requests/).
 
 Contributions can take the form of new components or features, changes to existing features, tests, documentation (such as developer guides, user guides, examples, or specifications), bug fixes or optimizations.
@@ -15,14 +15,14 @@ For more detailed information on contribution please read our [beginners guide](
 
 ## Contribution requirements
 
-1. Contributions must adhere to the [Magento coding standards](https://devdocs.magento.com/guides/v2.3/coding-standards/bk-coding-standards.html).
+1. Contributions must adhere to the [coding standards](https://developer.adobe.com/commerce/php/coding-standards/).
 2. Pull requests (PRs) must be accompanied by a meaningful description of their purpose. Comprehensive descriptions increase the chances of a pull request being merged quickly and without additional clarification requests.
 3. Commits must be accompanied by meaningful commit messages. Please see the [Adobe IMS Pull Request Template](https://github.com/magento/adobe-ims/blob/master/.github/PULL_REQUEST_TEMPLATE.md) for more information.
 4. PRs which include bug fixes must be accompanied with a step-by-step description of how to reproduce the bug.
-3. PRs which include new logic or new features must be submitted along with:
-* Unit/integration test coverage
-* Proposed [documentation](https://devdocs.magento.com) updates. Documentation contributions can be submitted via the [devdocs GitHub](https://github.com/magento/devdocs).
-4. For larger features or changes, please [open an issue](https://github.com/magento/adobe-ims/issues) to discuss the proposed changes prior to development. This may prevent duplicate or unnecessary effort and allow other contributors to provide input.
+5. PRs which include new logic or new features must be submitted along with:
+   * Unit/integration test coverage
+   * Proposed [documentation](https://developer.adobe.com/commerce) updates. Use feedback buttons __Edit in GitHub__ and __Log an issue__ at the top of a relevant topic.
+6. For larger features or changes, please [open an issue](https://github.com/magento/adobe-ims/issues) to discuss the proposed changes prior to development. This may prevent duplicate or unnecessary effort and allow other contributors to provide input.
 
 ## Contribution process
 
@@ -32,7 +32,7 @@ This will allow you to collaborate with the Adobe IMS development team, fork the
 1. Search current [listed issues](https://github.com/magento/adobe-ims/issues) (open or closed) for similar proposals of intended contribution before starting work on a new contribution.
 2. Review the [Contributor License Agreement](https://opensource.adobe.com/cla.html) if this is your first time contributing.
 3. Create and test your work.
-4. Fork the Adobe IMS repository according to the [Fork A Repository instructions](https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#fork) and when you are ready to send us a pull request – follow the [Create A Pull Request instructions](https://devdocs.magento.com/guides/v2.3/contributor-guide/contributing.html#pull_request).
+4. Fork the Adobe IMS repository according to the [Forks and pull requests instructions](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#forks-and-pull-requests).
 5. Once your contribution is received the Adobe IMS development team will review the contribution and collaborate with you as needed.
 
 ## Code of Conduct
