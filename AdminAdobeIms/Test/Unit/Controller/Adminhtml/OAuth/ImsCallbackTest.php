@@ -230,8 +230,10 @@ class ImsCallbackTest extends TestCase
             ->with('form_key')
             ->willReturnSelf();
         $this->requestMock->expects($this->any())->method('getParam')
-            ->withConsecutive(['state'], ['locale'])
-            ->willReturnOnConsecutiveCalls('abc', 'en');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['state'] => 'abc',
+                ['locale'] => 'en'
+            });
         $this->authSessionMock->expects($this->any())->method('setIsUrlNotice')
             ->willReturnSelf();
         $this->authSessionMock->expects($this->any())->method('getLocale')
@@ -246,7 +248,9 @@ class ImsCallbackTest extends TestCase
         $this->authMock->expects($this->any())->method('isLoggedIn')->willReturn(false);
         $this->objectManagerMock
             ->method('get')
-            ->withConsecutive([Locale::class], [\Magento\Backend\Model\Locale\Manager::class])
-            ->willReturnOnConsecutiveCalls($this->localeMock, $this->managerMock);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Locale::class] => $this->localeMock,
+                [\Magento\Backend\Model\Locale\Manager::class] => $this->managerMock
+            });
     }
 }
