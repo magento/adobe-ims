@@ -236,6 +236,8 @@ class ImsConnection
     }
 
     /**
+     * Get case-insensitive location from headers
+     *
      * @param array $headers
      * @return string
      */
