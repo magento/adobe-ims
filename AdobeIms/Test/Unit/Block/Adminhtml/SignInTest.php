@@ -155,7 +155,7 @@ class SignInTest extends TestCase
      * @param array $userData
      * @return array
      */
-    private function getDefaultComponentConfig(array $userData): array
+    private static function getDefaultComponentConfig(array $userData): array
     {
         return [
             'component' => 'Magento_AdobeIms/js/signIn',
@@ -182,7 +182,7 @@ class SignInTest extends TestCase
      *
      * @return array
      */
-    private function getConfigProvideConfig(): array
+    private static function getConfigProvideConfig(): array
     {
         return [
             'component' => 'Magento_AdobeIms/js/test',
@@ -208,7 +208,7 @@ class SignInTest extends TestCase
      *
      * @return array
      */
-    private function getDefaultUserData(): array
+    private static function getDefaultUserData(): array
     {
         return [
             'isAuthorized' => false,
@@ -221,7 +221,7 @@ class SignInTest extends TestCase
     /**
      * @return array
      */
-    public function userDataProvider(): array
+    public static function userDataProvider(): array
     {
         return [
             'Existing authorized user' => [
@@ -234,7 +234,7 @@ class SignInTest extends TestCase
                     'image' => 'image.png'
                 ],
                 [],
-                $this->getDefaultComponentConfig([
+                self::getDefaultComponentConfig([
                     'isAuthorized' => true,
                     'name' => 'John',
                     'email' => 'john@email.com',
@@ -251,7 +251,7 @@ class SignInTest extends TestCase
                     'image' => 'image.png'
                 ],
                 [],
-                $this->getDefaultComponentConfig($this->getDefaultUserData()),
+                self::getDefaultComponentConfig(self::getDefaultUserData()),
             ],
             'Non-existing user' => [
                 13,
@@ -263,7 +263,7 @@ class SignInTest extends TestCase
                     'image' => 'image.png'
                 ],
                 [],
-                $this->getDefaultComponentConfig($this->getDefaultUserData()),
+                self::getDefaultComponentConfig(self::getDefaultUserData()),
             ],
             'Existing user with additional config provider' => [
                 14,
@@ -274,10 +274,10 @@ class SignInTest extends TestCase
                     'email' => 'john@email.com',
                     'image' => 'image.png'
                 ],
-                $this->getConfigProvideConfig(),
+                self::getConfigProvideConfig(),
                 array_replace_recursive(
-                    $this->getDefaultComponentConfig($this->getDefaultUserData()),
-                    $this->getConfigProvideConfig()
+                    self::getDefaultComponentConfig(self::getDefaultUserData()),
+                    self::getConfigProvideConfig()
                 )
             ]
         ];

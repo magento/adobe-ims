@@ -179,7 +179,7 @@ class LoginTest extends TestCase
      *
      * @return array
      */
-    public function responseDataProvider(): array
+    public static function responseDataProvider(): array
     {
         return
             [

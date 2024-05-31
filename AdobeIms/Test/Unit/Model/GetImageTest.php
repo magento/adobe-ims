@@ -112,7 +112,7 @@ class GetImageTest extends TestCase
      *
      * @return array
      */
-    public function imagesDataProvider(): array
+    public static function imagesDataProvider(): array
     {
         return [
             [

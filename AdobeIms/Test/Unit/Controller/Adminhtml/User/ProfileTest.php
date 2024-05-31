@@ -134,7 +134,7 @@ class ProfileTest extends TestCase
      *
      * @return array
      */
-    public function userDataProvider(): array
+    public static function userDataProvider(): array
     {
         return
             [
