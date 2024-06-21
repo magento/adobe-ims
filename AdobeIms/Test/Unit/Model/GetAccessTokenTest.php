@@ -100,7 +100,7 @@ class GetAccessTokenTest extends TestCase
      *
      * @return array
      */
-    public function expectedDataProvider(): array
+    public static function expectedDataProvider(): array
     {
         return
             [
