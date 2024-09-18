@@ -108,7 +108,7 @@ class GetAccessTokenTest extends TestCase
                     'token' => 'kladjflakdjf3423rfzddsf'
                 ],
                 [
-                    'null_token' => null
+                    'token' => null
                 ]
             ];
     }
