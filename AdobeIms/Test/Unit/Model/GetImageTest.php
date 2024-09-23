@@ -116,7 +116,7 @@ class GetImageTest extends TestCase
     {
         return [
             [
-                'expected_result' => [
+                'expectedResult' => [
                     'user' => [
                         'images' => [
                             50 => 'https://mir-s3-cdn-cf.behance.net/user/50/61269e393218159.5d8e3b72bcfb9.jpg',
@@ -129,7 +129,7 @@ class GetImageTest extends TestCase
                     ],
                     'http_code' => 200,
                 ],
-                'expected_image_url' => 'https://mir-s3-cdn-cf.behance.net/user/276/61269e393218159.5d8e3b72bcfb9.jpg'
+                'expectedImageUrl' => 'https://mir-s3-cdn-cf.behance.net/user/276/61269e393218159.5d8e3b72bcfb9.jpg'
             ]
         ];
     }

@@ -185,7 +185,7 @@ class LoginTest extends TestCase
             [
                 [
                     'userId' => 10,
-                    'tokenResponse' => [
+                    'responseData' => [
                         'name' => 'Test User',
                         'email' => 'user@test.com',
                         'access_token' => 'kladjflakdjf3423rfzddsf',
