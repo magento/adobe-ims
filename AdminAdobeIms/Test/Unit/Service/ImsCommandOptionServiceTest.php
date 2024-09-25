@@ -255,7 +255,7 @@ class ImsCommandOptionServiceTest extends TestCase
      *
      * @return string[][]
      */
-    public function validInput(): array
+    public static function validInput(): array
     {
         return [
             [
@@ -290,7 +290,7 @@ class ImsCommandOptionServiceTest extends TestCase
      *
      * @return string[][]
      */
-    public function invalidInput(): array
+    public static function invalidInput(): array
     {
         return [
             [
