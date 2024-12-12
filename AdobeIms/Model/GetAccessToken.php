@@ -51,7 +51,7 @@ class GetAccessToken implements GetAccessTokenInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adminUserId = null): ?string
+    public function execute(?int $adminUserId = null): ?string
     {
         try {
             $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();

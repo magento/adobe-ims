@@ -60,7 +60,7 @@ class FlushUserTokens implements FlushUserTokensInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adminUserId = null): void
+    public function execute(?int $adminUserId = null): void
     {
         try {
             $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();
@@ -82,7 +82,7 @@ class FlushUserTokens implements FlushUserTokensInterface
      * @throws NoSuchEntityException
      * @throws Exception
      */
-    private function revokeTokenForAdobeIms(int $adminUserId = null): void
+    private function revokeTokenForAdobeIms(?int $adminUserId = null): void
     {
         $list = $this->imsWebapiRepository->getByAdminUserId($adminUserId);
         foreach ($list as $entity) {
@@ -102,7 +102,7 @@ class FlushUserTokens implements FlushUserTokensInterface
      * @throws NoSuchEntityException
      * @throws LocalizedException
      */
-    private function removeTokensFromTable(int $adminUserId = null): void
+    private function removeTokensFromTable(?int $adminUserId = null): void
     {
         $this->imsWebapiRepository->deleteByAdminUserId($adminUserId);
     }

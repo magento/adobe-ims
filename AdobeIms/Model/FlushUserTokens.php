@@ -44,7 +44,7 @@ class FlushUserTokens implements FlushUserTokensInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adminUserId = null): void
+    public function execute(?int $adminUserId = null): void
     {
         try {
             $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();

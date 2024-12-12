@@ -50,7 +50,7 @@ class UserAuthorizedProxy implements UserAuthorizedInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adminUserId = null): bool
+    public function execute(?int $adminUserId = null): bool
     {
         if ($this->adminAdobeImsConfig->enabled()) {
             return $this->userAuthorizedSession->execute($adminUserId);

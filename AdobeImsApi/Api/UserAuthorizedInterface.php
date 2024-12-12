@@ -20,5 +20,5 @@ interface UserAuthorizedInterface
      * @param int $adminUserId
      * @return bool
      */
-    public function execute(int $adminUserId = null): bool;
+    public function execute(?int $adminUserId = null): bool;
 }

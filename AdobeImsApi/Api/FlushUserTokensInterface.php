@@ -19,5 +19,5 @@ interface FlushUserTokensInterface
      *
      * @param int $adminUserId
      */
-    public function execute(int $adminUserId = null): void;
+    public function execute(?int $adminUserId = null): void;
 }

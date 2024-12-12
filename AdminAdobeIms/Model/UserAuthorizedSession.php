@@ -41,7 +41,7 @@ class UserAuthorizedSession implements UserAuthorizedInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adminUserId = null): bool
+    public function execute(?int $adminUserId = null): bool
     {
         $token = $this->auth->getAuthStorage()->getAdobeAccessToken();
 

@@ -20,5 +20,5 @@ interface GetAccessTokenInterface
      * @param int $adminUserId
      * @return string|null
      */
-    public function execute(int $adminUserId = null): ?string;
+    public function execute(?int $adminUserId = null): ?string;
 }
