@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -134,7 +135,7 @@ class ProfileTest extends TestCase
      *
      * @return array
      */
-    public function userDataProvider(): array
+    public static function userDataProvider(): array
     {
         return
             [

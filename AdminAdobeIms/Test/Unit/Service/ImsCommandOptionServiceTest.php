@@ -1,6 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -255,7 +256,7 @@ class ImsCommandOptionServiceTest extends TestCase
      *
      * @return string[][]
      */
-    public function validInput(): array
+    public static function validInput(): array
     {
         return [
             [
@@ -290,7 +291,7 @@ class ImsCommandOptionServiceTest extends TestCase
      *
      * @return string[][]
      */
-    public function invalidInput(): array
+    public static function invalidInput(): array
     {
         return [
             [

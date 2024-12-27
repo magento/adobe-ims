@@ -1,7 +1,8 @@
 <?php
 declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
+ * Copyright 2024 Adobe
+ * All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -179,13 +180,13 @@ class LoginTest extends TestCase
      *
      * @return array
      */
-    public function responseDataProvider(): array
+    public static function responseDataProvider(): array
     {
         return
             [
                 [
                     'userId' => 10,
-                    'tokenResponse' => [
+                    'responseData' => [
                         'name' => 'Test User',
                         'email' => 'user@test.com',
                         'access_token' => 'kladjflakdjf3423rfzddsf',
