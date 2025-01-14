@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -50,7 +50,7 @@ class UserAuthorizedProxy implements UserAuthorizedInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adminUserId = null): bool
+    public function execute(?int $adminUserId = null): bool
     {
         if ($this->adminAdobeImsConfig->enabled()) {
             return $this->userAuthorizedSession->execute($adminUserId);
