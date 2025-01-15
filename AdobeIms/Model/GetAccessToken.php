@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,7 @@ class GetAccessToken implements GetAccessTokenInterface
     /**
      * @inheritdoc
      */
-    public function execute(int $adminUserId = null): ?string
+    public function execute(?int $adminUserId = null): ?string
     {
         try {
             $adminUserId = $adminUserId ?? (int) $this->userContext->getUserId();
