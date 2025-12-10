@@ -50,7 +50,7 @@ class AdminAdobeImsDisableCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $this->adminImsConfig->disableModule();
