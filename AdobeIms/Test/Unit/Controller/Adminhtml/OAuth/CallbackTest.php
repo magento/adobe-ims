@@ -101,7 +101,7 @@ class CallbackTest extends TestCase
         $token = $this->createMock(TokenResponseInterface::class);
 
         $this->authMock->method('getUser')
-            ->will($this->returnValue($this->user));
+            ->willReturn($this->user);
         $this->user->method('getId')
             ->willReturn($userId);
 

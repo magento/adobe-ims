@@ -51,7 +51,7 @@ class FlushUsersTokensObserverTest extends TestCase
         $roleMock = $this->createMock(Role::class);
         $roleMock->expects($this->once())->method("getRoleUsers")->willReturn([1,2,3]);
         $eventObserverMock->expects($this->exactly(2))->method("getDataByKey")
-            ->will($this->returnValueMap([["request", $requestMock],["object", $roleMock]]));
+            ->willReturnMap([["request", $requestMock],["object", $roleMock]]);
         $this->flushUserTokens->expects($this->exactly(3))->method("execute")->willReturnSelf();
         $this->model->execute($eventObserverMock);
     }
