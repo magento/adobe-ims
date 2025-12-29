@@ -16,6 +16,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\AdobeImsApi\Api\Data\UserProfileInterface;
@@ -127,8 +128,8 @@ class LoginTest extends TestCase
      *
      * @param int $userId
      * @param array $responseData
-     * @dataProvider responseDataProvider
      */
+    #[DataProvider('responseDataProvider')]
     public function testExecute(
         int $userId,
         array $responseData

@@ -17,7 +17,8 @@ use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
 use Symfony\Component\Console\Helper\FormatterHelper;
@@ -34,6 +35,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class AdminAdobeImsEnableCommandTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ImsConfig
      */
@@ -90,7 +93,7 @@ class AdminAdobeImsEnableCommandTest extends TestCase
                 'adminImsConnection' => $this->adminImsConnectionMock,
                 'imsCommandOptionService' => $this->imsCommandOptionService,
                 'cacheTypeList' => $this->typeListInterface,
-                'updateTokenService' => $this->updateTokensService
+                'updateTokensService' => $this->updateTokensService
             ]
         );
     }
@@ -99,26 +102,26 @@ class AdminAdobeImsEnableCommandTest extends TestCase
      * Test AdminAdobeIms Command calls cache clear and return correct message
      *
      * @param bool $testAuthMode
-     * @param InvokedCountMatcher$enableMethodCallExpection
-     * @param InvokedCountMatcher $cleanMethodCallExpection
+     * @param string $enableMethodCallExpection
+     * @param string $cleanMethodCallExpection
      * @param string $outputMessage
      * @param bool $isTwoFactorAuthEnabled
      * @return void
      * @throws Exception
-     * @dataProvider cliCommandProvider
      */
+    #[DataProvider('cliCommandProvider')]
     public function testAdminAdobeImsModuleEnableWillClearCacheWhenSuccessful(
         bool $testAuthMode,
-        InvokedCountMatcher $enableMethodCallExpection,
-        InvokedCountMatcher $cleanMethodCallExpection,
+        string $enableMethodCallExpection,
+        string $cleanMethodCallExpection,
         string $outputMessage,
         bool $isTwoFactorAuthEnabled
     ): void {
-        $inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
+        $enableMatcher = $this->createInvocationMatcher($enableMethodCallExpection);
+        $cleanMatcher = $this->createInvocationMatcher($cleanMethodCallExpection);
+        $inputMock = $this->createMock(InputInterface::class);
 
-        $outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $outputMock = $this->createMock(OutputInterface::class);
 
         $this->questionHelperMock->method('ask')->willReturn('ORGId');
 
@@ -131,22 +134,21 @@ class AdminAdobeImsEnableCommandTest extends TestCase
             ->willReturn($testAuthMode);
 
         $this->adminImsConfigMock
-            ->expects($enableMethodCallExpection)
+            ->expects($enableMatcher)
             ->method('enableModule');
 
         $this->typeListInterface
-            ->expects($cleanMethodCallExpection)
+            ->expects($cleanMatcher)
             ->method('cleanType')
             ->with(Config::TYPE_IDENTIFIER);
 
         $this->updateTokensService
-            ->expects($cleanMethodCallExpection)
+            ->expects($this->createInvocationMatcher($cleanMethodCallExpection))
             ->method('execute');
 
         $outputMock->expects($this->once())
             ->method('writeln')
-            ->with($outputMessage, null)
-            ->willReturnSelf();
+            ->with($outputMessage);
 
         $this->enableCommand->setHelperSet($this->getHelperSet());
         $this->enableCommand->run($inputMock, $outputMock);
@@ -162,31 +164,31 @@ class AdminAdobeImsEnableCommandTest extends TestCase
         return [
             [
                 true,
-                self::once(),
-                self::once(),
+                'once',
+                'once',
                 'Admin Adobe IMS integration is enabled',
                 true
             ],
             [
                 false,
-                self::never(),
-                self::never(),
+                'never',
+                'never',
                 '<error>The Client ID, Client Secret, Organization ID and 2FA are required ' .
                 'when enabling the Admin Adobe IMS Module</error>',
                 true
             ],
             [
                 true,
-                self::never(),
-                self::never(),
+                'never',
+                'never',
                 '<error>The Client ID, Client Secret, Organization ID and 2FA are required ' .
                 'when enabling the Admin Adobe IMS Module</error>',
                 false
             ],
             [
                 false,
-                self::never(),
-                self::never(),
+                'never',
+                'never',
                 '<error>The Client ID, Client Secret, Organization ID and 2FA are required ' .
                 'when enabling the Admin Adobe IMS Module</error>',
                 false
