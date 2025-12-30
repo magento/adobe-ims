@@ -18,6 +18,7 @@ use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\Backend\Model\Auth\StorageInterface;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -27,6 +28,8 @@ use Psr\Log\LoggerInterface;
  */
 class LogOutTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const HTTP_FOUND = 200;
     private const HTTP_ERROR = 500;
 
@@ -73,9 +76,13 @@ class LogOutTest extends TestCase
         $this->loggerInterfaceMock = $this->createMock(LoggerInterface::class);
         $this->imsConnection = $this->createMock(ImsConnection::class);
         $this->auth = $this->createMock(Auth::class);
-        $this->session = $this->getMockBuilder(StorageInterface::class)
-            ->addMethods(['getAdobeAccessToken'])
-            ->getMockForAbstractClass();
+        $this->session = $this->createPartialMockWithReflection(
+            StorageInterface::class,
+            [
+                'processLogin', 'processLogout', 'isLoggedIn', 'prolong',
+                'getAdobeAccessToken'
+            ]
+        );
         $this->model = new LogOut(
             $this->loggerInterfaceMock,
             $this->config,

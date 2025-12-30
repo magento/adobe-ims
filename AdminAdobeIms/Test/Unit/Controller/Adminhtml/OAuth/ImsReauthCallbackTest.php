@@ -89,10 +89,7 @@ class ImsReauthCallbackTest extends TestCase
         $this->context = $this->createMock(Context::class);
         $this->imsConfigMock = $this->createMock(ImsConfig::class);
         $this->loggerMock = $this->createMock(AdminAdobeImsLogger::class);
-        $this->messagesMock = $this->getMockBuilder(Manager::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addErrorMessage'])
-            ->getMockForAbstractClass();
+        $this->messagesMock = $this->createPartialMock(Manager::class, ['addErrorMessage']);
     }
 
     /**

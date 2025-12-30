@@ -1,57 +1,315 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Test\Unit\Service;
 
-use Magento\AdminAdobeIms\Exception\AdobeImsOrganizationAuthorizationException;
-use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdminAdobeIms\Service\ImsOrganizationService;
+use Magento\AdminAdobeIms\Service\ImsCommandOptionService;
+use Magento\AdminAdobeIms\Service\ImsCommandValidationService;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class ImsOrganizationServiceTest extends TestCase
+class ImsCommandOptionServiceTest extends TestCase
 {
     private const VALID_ORGANIZATION_ID = '12121212ABCD1211AA11ABCD';
-    private const INVALID_ORGANIZATION_ID = '12121212ABCD1211AA11XXXX';
+    private const VALID_ORGANIZATION_ID_ALTERNATE = '12121212ABCD1211AA11ABCD@AdobeOrg';
+    private const VALID_CLIENT_ID = 'AdobeCommerceIMS';
+    private const VALID_CLIENT_SECRET = 'valid_client-secret';
+
+    private const INVALID_ORGANIZATION_ID = '12121212AB$D1211AA11ABCD';
+    private const INVALID_CLIENT_ID = '12121212$$ABCD1211AA11';
+    private const INVALID_CLIENT_SECRET = '1212121$$$2ABCD1211AA11';
 
     /**
-     * @var ImsOrganizationService
+     * @var ImsCommandOptionService
      */
-    private $imsOrganizationService;
+    private $imsCommandOptionService;
 
     /**
-     * @var ImsConfig
+     * @var ImsCommandValidationService|MockObject
      */
-    private $adminImsConfigMock;
+    private $imsCommandValidationServiceMock;
+
+    /**
+     * @var InputInterface|MockObject
+     */
+    private $inputMock;
+
+    /**
+     * @var OutputInterface|MockObject
+     */
+    private $outputMock;
 
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->adminImsConfigMock = $this->createMock(ImsConfig::class);
+        $this->imsCommandValidationServiceMock = $this->getMockBuilder(ImsCommandValidationService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->imsOrganizationService = $objectManagerHelper->getObject(
-            ImsOrganizationService::class,
+        $this->inputMock = $this->createMock(InputInterface::class);
+
+        $this->outputMock = $this->createMock(OutputInterface::class);
+
+        $this->imsCommandOptionService = $objectManagerHelper->getObject(
+            ImsCommandOptionService::class,
             [
-                'adminImsConfig' => $this->adminImsConfigMock
+                'imsCommandValidationService' => $this->imsCommandValidationServiceMock
             ]
         );
     }
 
-    public function testCheckOrganizationMembershipThrowsExceptionWhenProfileNotAssignedToOrg()
+    /**
+     * @param string $argument
+     * @param string $value
+     * @param string $validatorMethod
+     * @return void
+     * @throws LocalizedException
+     */
+    #[DataProvider('validInput')]
+    public function testValidInputWillBeReturned(string $argument, string $value, string $validatorMethod): void
     {
-        $this->adminImsConfigMock
-            ->method('getOrganizationId')
+        $helperMock = $this->getMockBuilder(QuestionHelper::class)
+            ->getMock();
+
+        $this->inputMock
+            ->method('getOption')
+            ->with($argument)
+            ->willReturn($value);
+
+        $this->imsCommandValidationServiceMock
+            ->method($validatorMethod)
+            ->with($value)
+            ->willReturn($value);
+
+        $input = $this->executeGetOption($argument, $helperMock);
+
+        $this->assertEquals(
+            $value,
+            $input
+        );
+    }
+
+    /**
+     * @param string $argument
+     * @param string $value
+     * @param string $validatorMethod
+     * @return void
+     * @throws LocalizedException
+     */
+    #[DataProvider('validInput')]
+    public function testOrganizationIdPromptReturnsOrgId(
+        string $argument,
+        string $value,
+        string $validatorMethod
+    ): void {
+        $this->inputMock
+            ->method('getOption')
+            ->with($argument)
             ->willReturn('');
 
-        $this->expectException(AdobeImsOrganizationAuthorizationException::class);
-        $this->expectExceptionMessage('Can\'t check user membership in organization.');
+        $this->imsCommandValidationServiceMock
+            ->method($validatorMethod)
+            ->with($value)
+            ->willReturn($value);
 
-        $this->imsOrganizationService->checkOrganizationMembership('my_token');
+        $helperMock = $this->getMockBuilder(QuestionHelper::class)
+            ->getMock();
+        $helperMock->method('ask')
+            ->willReturn($value)
+        ;
+
+        $input = $this->executeGetOption($argument, $helperMock);
+
+        $this->assertEquals(
+            $value,
+            $input
+        );
+    }
+
+    /**
+     * @param string $argument
+     * @param string $value
+     * @param string $validatorMethod
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    #[DataProvider('validInput')]
+    public function testEmptyOrganizationIdThrowsException(
+        string $argument,
+        string $value,
+        string $validatorMethod
+    ): void {
+        $this->inputMock
+            ->method('getOption')
+            ->with($argument)
+            ->willReturn('');
+
+        $expectedExceptionMessage = __('This field is required to enable the Admin Adobe IMS Module');
+        $expectedException = new LocalizedException($expectedExceptionMessage);
+
+        $helperMock = $this->getMockBuilder(QuestionHelper::class)
+            ->getMock();
+        $helperMock->method('ask')
+            ->willThrowException($expectedException)
+        ;
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('This field is required to enable the Admin Adobe IMS Module');
+
+        $this->executeGetOption($argument, $helperMock);
+    }
+
+    /**
+     * @param $argument
+     * @param $value
+     * @param $validatorMethod
+     * @param $exceptionMessage
+     * @return void
+     */
+    #[DataProvider('invalidInput')]
+    public function testInvalidOrganizationIdThrowsException(
+        $argument,
+        $value,
+        $validatorMethod,
+        $exceptionMessage
+    ): void {
+        $this->inputMock
+            ->method('getOption')
+            ->with($argument)
+            ->willReturn($value);
+
+        $expectedExceptionMessage = __($exceptionMessage);
+        $expectedException = new LocalizedException($expectedExceptionMessage);
+
+        $helperMock = $this->getMockBuilder(QuestionHelper::class)
+            ->getMock();
+
+        $this->imsCommandValidationServiceMock
+            ->method($validatorMethod)
+            ->with($value)
+            ->willThrowException($expectedException);
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage($exceptionMessage);
+
+        $this->executeGetOption($argument, $helperMock);
+    }
+
+    /**
+     * @param $argument
+     * @param $helperMock
+     * @return string|null
+     * @throws LocalizedException
+     */
+    public function executeGetOption($argument, $helperMock): ?string
+    {
+        $input = null;
+        switch ($argument) {
+            case 'organization-id':
+                $input = $this->imsCommandOptionService->getOrganizationId(
+                    $this->inputMock,
+                    $this->outputMock,
+                    $helperMock,
+                    $argument
+                );
+                break;
+            case 'client-id':
+                $input = $this->imsCommandOptionService->getClientId(
+                    $this->inputMock,
+                    $this->outputMock,
+                    $helperMock,
+                    $argument
+                );
+                break;
+            case 'client-secret':
+                $input = $this->imsCommandOptionService->getClientSecret(
+                    $this->inputMock,
+                    $this->outputMock,
+                    $helperMock,
+                    $argument
+                );
+                break;
+        }
+
+        return $input;
+    }
+
+    /**
+     * Data provider for valid CLI Input
+     * - option name
+     * - option value
+     * - validator method
+     *
+     * @return string[][]
+     */
+    public static function validInput(): array
+    {
+        return [
+            [
+                'organization-id',
+                self::VALID_ORGANIZATION_ID,
+                'organizationIdValidator'
+            ],
+            [
+                'organization-id',
+                self::VALID_ORGANIZATION_ID_ALTERNATE,
+                'organizationIdValidator'
+            ],
+            [
+                'client-id',
+                self::VALID_CLIENT_ID,
+                'clientIdValidator'
+            ],
+            [
+                'client-secret',
+                self::VALID_CLIENT_SECRET,
+                'clientSecretValidator'
+            ]
+        ];
+    }
+
+    /**
+     * Data provider for valid CLI Input
+     * - option name
+     * - option value
+     * - validator method
+     * - exception message
+     *
+     * @return string[][]
+     */
+    public static function invalidInput(): array
+    {
+        return [
+            [
+                'organization-id',
+                self::INVALID_ORGANIZATION_ID,
+                'organizationIdValidator',
+                'No valid Organization ID provided'
+            ],
+            [
+                'client-id',
+                self::INVALID_CLIENT_ID,
+                'clientIdValidator',
+                'No valid Client ID provided'
+            ],
+            [
+                'client-secret',
+                self::INVALID_CLIENT_SECRET,
+                'clientSecretValidator',
+                'No valid Client Secret provided'
+            ]
+        ];
     }
 }

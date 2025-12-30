@@ -190,9 +190,7 @@ class ImsWebapiRepositoryTest extends TestCase
     protected function initCollection(): array
     {
         $collectionSize = 1;
-        $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
-            ->onlyMethods(['getPageSize'])
-            ->getMockForAbstractClass();
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
 
         $searchCriteriaMock->expects($this->any())
             ->method('getPageSize')
@@ -283,8 +281,7 @@ class ImsWebapiRepositoryTest extends TestCase
     protected function createSearchResultsMock($searchCriteriaMock, $imsWebapiMock, $collectionSize = 1): MockObject
     {
         /** @var MockObject $searchResultsMock */
-        $searchResultsMock = $this->getMockBuilder(ImsWebapiSearchResultsInterface::class)
-            ->getMockForAbstractClass();
+        $searchResultsMock = $this->createMock(ImsWebapiSearchResultsInterface::class);
 
         $searchResultsMock->expects($this->once())
             ->method('setSearchCriteria')
