@@ -21,6 +21,7 @@ use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -112,13 +113,13 @@ class SignInTest extends TestCase
     }
 
     /**
-     * @dataProvider userDataProvider
      * @param int $userId
      * @param bool $userExists
      * @param array $userData
      * @param array $configProviderData
      * @param array $expectedData
      */
+    #[DataProvider('userDataProvider')]
     public function testGetComponentJsonConfig(
         int $userId,
         bool $userExists,
@@ -139,13 +140,17 @@ class SignInTest extends TestCase
             ->method('getUserId')
             ->willReturn($userId);
 
-        $userRepositoryWillReturn = $userExists
-            ? $this->returnValue($userProfile)
-            : $this->throwException(new NoSuchEntityException());
-        $this->userProfileRepositoryMock
-            ->method('getByUserId')
-            ->with($userId)
-            ->will($userRepositoryWillReturn);
+        if ($userExists) {
+            $this->userProfileRepositoryMock
+                ->method('getByUserId')
+                ->with($userId)
+                ->willReturn($userProfile);
+        } else {
+            $this->userProfileRepositoryMock
+                ->method('getByUserId')
+                ->with($userId)
+                ->willThrowException(new NoSuchEntityException());
+        }
 
         $configProviderMock = $this->createMock(ConfigProviderInterface::class);
         $configProviderMock->expects($this->any())

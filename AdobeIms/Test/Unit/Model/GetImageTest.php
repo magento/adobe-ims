@@ -12,6 +12,7 @@ use Magento\AdobeImsApi\Api\ConfigInterface;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -67,10 +68,10 @@ class GetImageTest extends TestCase
     /**
      * Test save.
      *
-     * @dataProvider imagesDataProvider
      * @param array $expectedResult
      * @param string $expectedImageUrl
      */
+    #[DataProvider('imagesDataProvider')]
     public function testExecute(array $expectedResult, string $expectedImageUrl): void
     {
         $curl = $this->createMock(Curl::class);
