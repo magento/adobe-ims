@@ -51,7 +51,6 @@ class VerifyAdminAdobeImsIsEnableTest extends TestCase
     public function testAroundExecuteWhenAdobeImsIsEnabled(): void
     {
         $closure = function () {
-            return;
         };
 
         $this->imsConfig

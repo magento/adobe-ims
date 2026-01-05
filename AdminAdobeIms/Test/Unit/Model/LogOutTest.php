@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,9 +12,6 @@ use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Model\LogOut;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeImsApi\Api\ConfigInterface;
-use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
-use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\Backend\Model\Auth\StorageInterface;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
