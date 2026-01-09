@@ -13,6 +13,7 @@ use Magento\AdobeImsApi\Api\UserProfileRepositoryInterface;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -61,8 +62,8 @@ class GetAccessTokenTest extends TestCase
      * Test save.
      *
      * @param string|null $token
-     * @dataProvider expectedDataProvider
      */
+    #[DataProvider('expectedDataProvider')]
     public function testExecute(?string $token): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);

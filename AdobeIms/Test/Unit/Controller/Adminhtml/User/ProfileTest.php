@@ -17,6 +17,7 @@ use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -88,10 +89,10 @@ class ProfileTest extends TestCase
     /**
      * Ensure that User Profile data can be returned.
      *
-     * @dataProvider userDataProvider
      * @param array $result
      * @throws NotFoundException
      */
+    #[DataProvider('userDataProvider')]
     public function testExecute(array $result): void
     {
         $this->userContext->expects($this->once())->method('getUserId')->willReturn(1);

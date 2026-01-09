@@ -17,6 +17,7 @@ use Magento\AdobeImsApi\Api\UserAuthorizedInterface;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Model\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -88,12 +89,12 @@ class SignInPluginTest extends TestCase
     }
 
     /**
-     * @dataProvider userDataProvider
      * @param array $userData
      * @param array $configProviderData
      * @param array $expectedData
      * @param bool $isAuthorized
      */
+    #[DataProvider('userDataProvider')]
     public function testAroundGetComponentJsonConfig(
         array $userData,
         array $configProviderData,
