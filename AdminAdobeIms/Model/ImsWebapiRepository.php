@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AdminAdobeIms\Model;
@@ -105,8 +104,9 @@ class ImsWebapiRepository implements ImsWebapiRepositoryInterface
     public function save(ImsWebapiInterface $entity): void
     {
         try {
+            $entityId = $entity->getId() ?? '';
             $this->resource->save($entity);
-            $this->loadedEntities[$entity->getId()] = $entity;
+            $this->loadedEntities[$entityId] = $entity;
         } catch (Exception $exception) {
             $this->logger->critical($exception);
             throw new CouldNotSaveException(__('Could not save ims token.'), $exception);
