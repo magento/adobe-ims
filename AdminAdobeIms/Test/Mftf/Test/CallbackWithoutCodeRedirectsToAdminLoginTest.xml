@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2022 Adobe
+  * All Rights Reserved.
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,9 +15,6 @@
             <description value="ImsCallback Controller redirects to admin login when no code is given"/>
             <severity value="CRITICAL"/>
             <group value="admin_ims"/>
-            <skip>
-                <issueId value="AC-3153">Skipped</issueId>
-            </skip>
             <testCaseId value="CABPI-205"/>
         </annotations>
         <before>
