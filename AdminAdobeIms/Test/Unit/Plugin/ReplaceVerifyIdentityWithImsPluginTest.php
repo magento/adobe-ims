@@ -16,12 +16,15 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\User\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ReplaceVerifyIdentityWithImsPlugin
      */
@@ -54,9 +57,13 @@ class ReplaceVerifyIdentityWithImsPluginTest extends TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->storageMock = $this->getMockBuilder(StorageInterface::class)
-            ->addMethods(['getAdobeAccessToken', 'getAdobeReAuthToken', 'setAdobeReAuthToken'])
-            ->getMockForAbstractClass();
+        $this->storageMock = $this->createPartialMockWithReflection(
+            StorageInterface::class,
+            [
+                'processLogin', 'processLogout', 'isLoggedIn', 'prolong',
+                'getAdobeAccessToken', 'getAdobeReAuthToken', 'setAdobeReAuthToken'
+            ]
+        );
 
         $this->authMock = $this->getMockBuilder(Auth::class)
             ->disableOriginalConstructor()

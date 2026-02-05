@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,12 +12,10 @@ use Magento\AdminAdobeIms\Model\Auth;
 use Magento\AdminAdobeIms\Model\ImsConnection;
 use Magento\AdminAdobeIms\Model\LogOut;
 use Magento\AdminAdobeIms\Service\ImsConfig;
-use Magento\AdobeImsApi\Api\ConfigInterface;
-use Magento\AdobeImsApi\Api\FlushUserTokensInterface;
-use Magento\AdobeImsApi\Api\GetAccessTokenInterface;
 use Magento\Backend\Model\Auth\StorageInterface;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\HTTP\Client\CurlFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -27,6 +25,8 @@ use Psr\Log\LoggerInterface;
  */
 class LogOutTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const HTTP_FOUND = 200;
     private const HTTP_ERROR = 500;
 
@@ -73,9 +73,13 @@ class LogOutTest extends TestCase
         $this->loggerInterfaceMock = $this->createMock(LoggerInterface::class);
         $this->imsConnection = $this->createMock(ImsConnection::class);
         $this->auth = $this->createMock(Auth::class);
-        $this->session = $this->getMockBuilder(StorageInterface::class)
-            ->addMethods(['getAdobeAccessToken'])
-            ->getMockForAbstractClass();
+        $this->session = $this->createPartialMockWithReflection(
+            StorageInterface::class,
+            [
+                'processLogin', 'processLogout', 'isLoggedIn', 'prolong',
+                'getAdobeAccessToken'
+            ]
+        );
         $this->model = new LogOut(
             $this->loggerInterfaceMock,
             $this->config,

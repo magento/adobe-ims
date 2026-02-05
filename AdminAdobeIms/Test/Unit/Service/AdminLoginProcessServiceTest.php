@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -18,10 +18,13 @@ use Magento\AdobeImsApi\Api\Data\TokenResponseInterface;
 use Magento\Backend\Model\Auth\StorageInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class AdminLoginProcessServiceTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const TEST_EMAIL = 'test@test.com';
 
     private const ERROR_MESSAGE = 'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -68,10 +71,13 @@ class AdminLoginProcessServiceTest extends TestCase
         $this->logOut = $this->createMock(LogOut::class);
         $this->dateTime = $this->createMock(DateTime::class);
 
-        $session = $this->getMockBuilder(StorageInterface::class)
-            ->addMethods(['setAdobeAccessToken', 'setTokenLastCheckTime'])
-            ->getMockForAbstractClass()
-        ;
+        $session = $this->createPartialMockWithReflection(
+            StorageInterface::class,
+            [
+                'processLogin', 'processLogout', 'isLoggedIn', 'prolong',
+                'setAdobeAccessToken', 'setTokenLastCheckTime'
+            ]
+        );
         $session
             ->method('setAdobeAccessToken')
             ->willReturnSelf();
