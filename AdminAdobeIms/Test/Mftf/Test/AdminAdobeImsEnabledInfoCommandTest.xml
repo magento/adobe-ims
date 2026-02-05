@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+/**
+  * Copyright 2022 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -16,9 +16,6 @@
             <description value="Runs bin/magento admin:adobe-ims info command"/>
             <severity value="MINOR"/>
             <group value="admin_ims"/>
-            <skip>
-                <issueId value="AC-3153">Skipped</issueId>
-            </skip>
             <testCaseId value="CABPI-186"/>
         </annotations>
         <before>
