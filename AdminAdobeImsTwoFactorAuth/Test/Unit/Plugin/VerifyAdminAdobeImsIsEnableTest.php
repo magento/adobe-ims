@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,6 @@ class VerifyAdminAdobeImsIsEnableTest extends TestCase
     public function testAroundExecuteWhenAdobeImsIsEnabled(): void
     {
         $closure = function () {
-            return;
         };
 
         $this->imsConfig
@@ -75,9 +74,7 @@ class VerifyAdminAdobeImsIsEnableTest extends TestCase
      */
     public function testAroundExecuteWhenAdobeImsIsDisabled(): void
     {
-        $result = $this->getMockBuilder(ResultInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $result = $this->createMock(ResultInterface::class);
 
         $closure = function () use ($result) {
             return $result;
