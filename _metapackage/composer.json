@@ -1,12 +1,14 @@
 {
-  "name": "adobe-commerce/adobe-ims-metapackage",
-  "description": "Adobe IMS Integration",
-  "type": "metapackage",
-  "require": {
-    "php": "~8.3.0||~8.4.0||~8.5.0",
-    "magento/module-admin-adobe-ims": "*",
-    "magento/module-admin-adobe-ims-two-factor-auth": "*",
-    "magento/module-adobe-ims": "*",
-    "magento/module-adobe-ims-api": "*"
-  }
+    "name": "adobe-commerce/adobe-ims-metapackage",
+    "description": "Adobe IMS Integration",
+    "type": "metapackage",
+    "version": "2.2.4",
+    "require": {
+        "php": "~8.3.0||~8.4.0||~8.5.0",
+        "magento/module-admin-adobe-ims": "100.5.4",
+        "magento/module-admin-adobe-ims-two-factor-auth": "1.0.3",
+        "magento/module-adobe-ims": "2.2.3",
+        "magento/module-adobe-ims-api": "2.2.3"
+    }
 }
+
