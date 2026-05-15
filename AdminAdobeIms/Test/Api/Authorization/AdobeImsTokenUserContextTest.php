@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Authorization;
+namespace Magento\AdminAdobeIms\Test\Api\Authorization;
 
 use Exception;
 use Magento\AdminAdobeIms\Api\ImsWebapiRepositoryInterface;
