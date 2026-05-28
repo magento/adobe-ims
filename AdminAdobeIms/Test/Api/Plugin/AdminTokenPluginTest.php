@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
-namespace Magento\AdminAdobeIms\Plugin;
+namespace Magento\AdminAdobeIms\Test\Api\Plugin;
 
 use Magento\AdminAdobeIms\Service\ImsConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
